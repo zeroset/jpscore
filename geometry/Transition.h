@@ -42,11 +42,12 @@ private:
      // number of agents that passed that exit
      int _doorUsage;
      double _lastPassingTime;
+     double _waitingTime;
      std::string _flowAtExit;
 
 public:
      /**
-      * Cosntructor
+      * Constructor
       */
      Transition();
 
@@ -54,6 +55,10 @@ public:
       * Destructor
       */
      virtual ~Transition();
+     /**
+     * Set the time a door is unusable after being taken
+     */
+     void SetWaitingTime(double time);
 
      /**
       * Set/Get the type of the transition
@@ -65,6 +70,12 @@ public:
       * The first one is set in the crossing class.
       */
      void SetRoom2(Room* ID);
+
+     /**
+      * check if a transition is open at a specific time
+      * @param time, the time to check
+      */
+     void refreshStatus(double time);
 
      /**
       * Increment the number of persons that used that exit

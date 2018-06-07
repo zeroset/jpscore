@@ -724,6 +724,14 @@ void Building::UpdateGrid()
      _linkedCellGrid->Update(_allPedestians);
 }
 
+void Building::UpdateTransitions(double time)
+{
+    for (auto &transition : _transitions){
+        transition.second->refreshStatus(time);
+    }
+
+}
+
 void Building::InitGrid()
 {
      // first look for the geometry boundaries

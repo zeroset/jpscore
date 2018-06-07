@@ -472,6 +472,9 @@ double Simulation::RunBody(double maxSimTime)
         ProcessAgentsQueue();
 
         if (t>Pedestrian::GetMinPremovementTime()) {
+            //update transitions status
+            _building->UpdateTransitions(t);
+
             //update the linked cells
             _building->UpdateGrid();
 

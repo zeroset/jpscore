@@ -193,6 +193,8 @@ public:
 
      void UpdateGrid();
 
+     void UpdateTransitions(double time);
+
      void AddSurroundingRoom(); // add a final room (outside or world), that encompasses the complete geometry
 
      const std::map<int, Crossing*>& GetAllCrossings() const;

@@ -289,6 +289,7 @@ bool GeoFileParser::LoadGeometry(Building* building)
                int subroom1_id = xmltoi(xTrans->Attribute("subroom1_id"), -1);
                int subroom2_id = xmltoi(xTrans->Attribute("subroom2_id"), -1);
                std::string type = xmltoa(xTrans->Attribute("type"), "normal");
+               double waiting_time = xmltof(xTrans->Attribute("waiting_time"), -1);
 
                double x1 = xmltof(xTrans->FirstChildElement("vertex")->Attribute("px"));
                double y1 = xmltof(xTrans->FirstChildElement("vertex")->Attribute("py"));
@@ -302,6 +303,7 @@ bool GeoFileParser::LoadGeometry(Building* building)
                t->SetPoint1(Point(x1, y1));
                t->SetPoint2(Point(x2, y2));
                t->SetType(type);
+               t->SetWaitingTime(waiting_time);
 
                if (room1_id!=-1 && subroom1_id!=-1) {
                     //Room* room = _rooms[room1_id];

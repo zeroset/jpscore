@@ -40,6 +40,7 @@ Transition::Transition() : Crossing()
      _isOpen = true;
      _doorUsage=0;
      _lastPassingTime=0;
+     _waitingTime=0;
      _room2 = nullptr;
 //     _lastTickTime1 = 0;
 //     _lastTickTime2 = 0;
@@ -52,6 +53,10 @@ Transition::~Transition()
 }
 
 
+void Transition::SetWaitingTime(double time)
+{
+     _waitingTime=time;
+}
 
 
 void Transition::SetType(string type)
@@ -67,6 +72,23 @@ void Transition::SetRoom2(Room* r)
 bool Transition::IsOpen() const
 {
      return Crossing::IsOpen();
+}
+
+//METHOD IN TRIAL
+void Transition::refreshStatus(double time)
+{
+
+     if(_lastPassingTime == 0 || _lastPassingTime + _waitingTime < time)
+     {
+         std::cout<<"DEBUG: OPEN"<<std::endl;
+         _isOpen = true;
+         Crossing::Open();
+     } else {
+         std::cout<<"DEBUG: CLOSED"<<std::endl;
+         std::cout<<"DEBUG: "<<_lastPassingTime<<" "<<_waitingTime<<" "<<time<<" "<<std::endl;
+         _isOpen = false;
+         Crossing::Close();
+     }
 }
 
 
