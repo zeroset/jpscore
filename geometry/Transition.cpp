@@ -80,12 +80,12 @@ void Transition::refreshStatus(double time)
 
      if(_lastPassingTime == 0 || _lastPassingTime + _waitingTime < time)
      {
-         std::cout<<"DEBUG: OPEN"<<std::endl;
+         //std::cout<<"DEBUG: OPEN"<<std::endl;
          _isOpen = true;
          Crossing::Open();
      } else {
-         std::cout<<"DEBUG: CLOSED"<<std::endl;
-         std::cout<<"DEBUG: "<<_lastPassingTime<<" "<<_waitingTime<<" "<<time<<" "<<std::endl;
+         //std::cout<<"DEBUG: CLOSED"<<std::endl;
+         //std::cout<<"DEBUG: "<<_lastPassingTime<<" "<<_waitingTime<<" "<<time<<" "<<std::endl;
          _isOpen = false;
          Crossing::Close();
      }
