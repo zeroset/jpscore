@@ -25,12 +25,14 @@
  *
  **/
 
+#include <time.h>
 #include "../math/Mathematics.h"
 #include "Point.h"
 #include "../general/Macros.h"
+#include "DangerLine.h"
 #include "Line.h"
 #include "Wall.h"
-#include <time.h>
+
 
 int Line::_static_UID = 0;
 
@@ -46,46 +48,36 @@ DangerLine::DangerLine() : Line()
     _fatalDistance = 0;
     _startDistance = 0;
     _alpha = 1;
-    std::srand(time(NULL));
-}
+    _x_speed = 0;
+    _y_speed = 0;
 
-DangerLine::DangerLine(const Point& p1, const Point& p2, int count, float fatalDistance, float startDistance, float lambda):
-      Line(p1,p2,count), _fatalDistance(fatalDistance), _startDistance(startDistance), _lamda(lambda)
-{
-}
-
-DangerLine::DangerLine(const Point& p1, const Point& p2):
-            Line(p1,p2), _fatalDistance(fatalDistance), _startDistance(startDistance), _lamda(lambda)
-{
-}
-
-DangerLine::DangerLine(const Line& orig):
-      _point1(orig.GetPoint1()), _point2(orig.GetPoint2()), _centre(orig.GetCentre()), _length(orig.GetLength()), _uid(orig.GetUniqueID())
-{
-}
-
-DangerLine::~DangerLine()
-{
 }
 
 
+void DangerLine::setParameters(double fatalDistance, double startDistance, double alpha, double x_speed,
+                               double y_speed) {
+    _fatalDistance = fatalDistance;
+    _startDistance = startDistance;
+    _alpha = alpha;
+    _x_speed = x_speed;
+    _y_speed = y_speed;
 
-
+}
 
 
 void DangerLine::expose(Pedestrian* ped)
 {
     Point p = ped->GetPos();
-    float fatality = abs(getFatalProba(p));
-    float fate = rand() % 100;
+    double fatality = abs(getFatalProbability(&p));
+    double fate = rand() % 100;
     if( fate < fatality ){
         ped->SetV0Norm(0,0,0,0,0,0,0);
     }
 }
 
-float DangerLine::getFatalProbability(Point *p)
+double DangerLine::getFatalProbability(const Point *p)
 {
-    float distance = this->DistTo(p);
+    double distance = this->DistTo(*p);
     if(distance < _fatalDistance) //certain death
     {
         return 100;
@@ -94,4 +86,16 @@ float DangerLine::getFatalProbability(Point *p)
     }else{
         return 0;
     }
+}
+
+void DangerLine::update(){
+
+    double new_x1 = this->GetPoint1()._x +_x_speed;
+    double new_y1 = this->GetPoint1()._y +_y_speed;
+    double new_x2 = this->GetPoint2()._x +_x_speed;
+    double new_y2 = this->GetPoint2()._y +_y_speed;
+
+    this->SetPoint1(Point(new_x1,new_y1));
+    this->SetPoint2(Point(new_x2,new_y2));
+
 }

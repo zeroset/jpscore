@@ -476,6 +476,11 @@ bool Building::AddGoal(Goal* goal)
      return true;
 }
 
+bool Building::AddDangerLine(DangerLine* dl){
+     _dangerLines.emplace_back(dl);
+     return true;
+}
+
 const map<int, Crossing*>& Building::GetAllCrossings() const
 {
      return _crossings;
@@ -494,6 +499,11 @@ const map<int, Hline*>& Building::GetAllHlines() const
 const map<int, Goal*>& Building::GetAllGoals() const
 {
      return _goals;
+}
+
+const vector<DangerLine*>& Building::GetAllDangerLines() const
+{
+     return _dangerLines;
 }
 
 Transition* Building::GetTransition(string caption) const
@@ -729,6 +739,17 @@ void Building::UpdateTransitions(double time)
     for (auto &transition : _transitions){
         transition.second->refreshStatus(time);
     }
+
+}
+
+void Building::UpdateDangerLine(){
+
+     for(auto &dl : _dangerLines){
+          dl->update();
+          for(auto &ped : _allPedestians){
+               dl->expose(ped);
+          }
+     }
 
 }
 

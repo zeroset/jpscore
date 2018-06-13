@@ -289,7 +289,7 @@ bool GeoFileParser::LoadGeometry(Building* building)
                int subroom1_id = xmltoi(xTrans->Attribute("subroom1_id"), -1);
                int subroom2_id = xmltoi(xTrans->Attribute("subroom2_id"), -1);
                std::string type = xmltoa(xTrans->Attribute("type"), "normal");
-               double waiting_time = xmltof(xTrans->Attribute("waiting_time"), -1);
+               double waiting_time = xmltof(xTrans->Attribute("waiting_time"), 0);
 
                double x1 = xmltof(xTrans->FirstChildElement("vertex")->Attribute("px"));
                double y1 = xmltof(xTrans->FirstChildElement("vertex")->Attribute("py"));
@@ -334,6 +334,33 @@ bool GeoFileParser::LoadGeometry(Building* building)
 
                building->AddTransition(t);
           }
+
+     //add "danger lines" to the building, danger lines are lines that can move and kill people standing too close
+    TiXmlNode* xDangerLineNode = xRootNode->FirstChild("danger_lines");
+    if (xDangerLineNode)
+        for (TiXmlElement* xDangerLine = xDangerLineNode->FirstChildElement("danger_line"); xDangerLine;
+             xDangerLine = xDangerLine->NextSiblingElement("danger_line")) {
+
+            double x_speed = xmltof(xDangerLine->Attribute("x_speed"), 0);
+            double y_speed = xmltof(xDangerLine->Attribute("y_speed"), 0);
+            double fatal_distance = xmltof(xDangerLine->Attribute("fatal_distance"), 0);
+            double danger_distance = xmltof(xDangerLine->Attribute("danger_distance"), 0);
+            double alpha = xmltof(xDangerLine->Attribute("alpha"), 1);
+
+            double x1 = xmltof(xDangerLine->FirstChildElement("vertex")->Attribute("px"));
+            double y1 = xmltof(xDangerLine->FirstChildElement("vertex")->Attribute("py"));
+
+            double x2 = xmltof(xDangerLine->LastChild("vertex")->ToElement()->Attribute("px"));
+            double y2 = xmltof(xDangerLine->LastChild("vertex")->ToElement()->Attribute("py"));
+
+            DangerLine* dl = new DangerLine();
+            dl->setParameters(fatal_distance,danger_distance,alpha,x_speed,y_speed);
+            dl->SetPoint1(Point(x1,y1));
+            dl->SetPoint2(Point(x2,y2));
+
+            building->AddDangerLine(dl);
+
+        }
 
      Log->Write("INFO: \tLoading building file successful!!!\n");
 

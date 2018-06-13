@@ -67,6 +67,7 @@ private:
      std::string _geometryFilename;
      LCGrid* _linkedCellGrid;
      std::vector<Pedestrian*> _allPedestians;
+     std::vector<DangerLine*> _dangerLines;
      std::map<int, std::shared_ptr<Room> > _rooms;
      std::map<int, Crossing*> _crossings;
      std::map<int, Transition*> _transitions;
@@ -195,6 +196,8 @@ public:
 
      void UpdateTransitions(double time);
 
+     void UpdateDangerLine();
+
      void AddSurroundingRoom(); // add a final room (outside or world), that encompasses the complete geometry
 
      const std::map<int, Crossing*>& GetAllCrossings() const;
@@ -205,6 +208,8 @@ public:
 
      const std::map<int, Goal*>& GetAllGoals() const;
 
+     const std::vector<DangerLine*>& GetAllDangerLines() const;
+
      bool AddCrossing(Crossing* line);
 
      bool AddTransition(Transition* line);
@@ -212,6 +217,8 @@ public:
      bool AddHline(Hline* line);
 
      bool AddGoal(Goal* goal);
+
+     bool AddDangerLine(DangerLine* dl);
 
      const std::string& GetProjectRootDir() const;
 

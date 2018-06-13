@@ -30,6 +30,7 @@
 #define _DANGERLINE_H
 
 #include "Line.h"
+#include "../pedestrian/Pedestrian.h"
 #include "../IO/OutputHandler.h"
 
 #include <string>
@@ -44,30 +45,26 @@ extern OutputHandler* Log;
 
 class DangerLine : public Line {
 private:
-    float _fatalDistance;
-    float _startDistance;
-    float _alpha;
+    double _fatalDistance;
+    double _startDistance;
+    double _alpha;
+    double _x_speed;
+    double _y_speed;
 
-    float getFatalProbability(Point *p);
+    double getFatalProbability(const Point *p);
 
 public:
 
     DangerLine();
 
-    DangerLine(const Point &p1, const Point &p2,
-               int count); // count = 0 --> don't count the line. Useful for temporary lines.
-
-    DangerLine(const Point &p1, const Point &p2);
-
-    DangerLine(const Line &orig);
-
     virtual ~DangerLine();
 
     void expose(Pedestrian *ped);
 
-    void setParameters(float fatalDistance, float startDistance, float lambda);
+    void setParameters(double fatalDistance, double startDistance, double alpha, double x_speed, double y_speed);
 
-}
+    void update();
+};
 
 #endif  /* _LINE_H */
 
