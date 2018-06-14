@@ -1,0 +1,106 @@
+<JuPedSim xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" project="JPS-Project" version="0.7" xsi:noNamespaceSchemaLocation="http://xsd.jupedsim.org/0.6/jps_ini_core.xsd">
+  <!-- seed used for initialising random generator -->
+  <seed>12542</seed>
+  <!-- geometry file -->
+  <geometry>geometry.xml</geometry>
+  <max_sim_time>100</max_sim_time>
+  <!--  <events_file>events_list.xml</events_file> -->
+  <!-- trajectories file and format -->
+  <trajectories format="xml-plain" fps="8">
+    <file location="jps_traj.xml"/>
+    <!--     <socket hostname="127.0.0.1" port="8989"/> -->
+  </trajectories>
+  <!-- where to store the logs -->
+  <logfile>jps_log</logfile>
+  <!--<show_statistics>true</show_statistics>-->
+  <num_threads>4</num_threads>
+  <show_statistics>true</show_statistics>
+  <operational_models>
+    <model operational_model_id="3" description="Tordeux2015">
+      <model_parameters>
+        <solver>euler</solver>
+        <stepsize>0.05</stepsize>
+        <exit_crossing_strategy>9</exit_crossing_strategy>
+        <delta_h>0.125</delta_h>
+        <wall_avoid_distance>0.8</wall_avoid_distance>
+        <use_wall_avoidance>true</use_wall_avoidance>
+        <linkedcells enabled="true" cell_size="2.2"/>
+        <force_ped a="5" D="0.1"/>
+        <force_wall a="1" D="0.02"/>
+      </model_parameters>
+      <agent_parameters agent_parameter_id="1">
+        <v0 mu="1.34" sigma="0.0"/>
+        <v0_upstairs mu="0.668" sigma="0.167"/>
+        <v0_downstairs mu="0.750" sigma="0.188"/>
+        <v0_idle_escalator_upstairs mu="0.5" sigma="0.0"/>
+        <v0_idle_escalator_downstairs mu="0.5" sigma="0.0"/>
+        <bmax mu="0.15" sigma="0.00000"/>
+        <!-- this is l, assuming peds are circles with constant radius -->
+        <bmin mu="0.15" sigma="0.00000"/>
+        <amin mu="0.15" sigma="0.00000"/>
+        <tau mu="0.5" sigma="0.001"/>
+        <atau mu="0.0" sigma="0.00000"/>
+        <T mu="1" sigma="0.001"/>
+      </agent_parameters>
+      <agent_parameters agent_parameter_id="2">
+        <v0 mu="0" sigma="0.0"/>
+        <v0_upstairs mu="0.668" sigma="0.167"/>
+        <v0_downstairs mu="0.750" sigma="0.188"/>
+        <v0_idle_escalator_upstairs mu="0.5" sigma="0.0"/>
+        <v0_idle_escalator_downstairs mu="0.5" sigma="0.0"/>
+        <bmax mu="0.15" sigma="0.00000"/>
+        <!-- this is l, assuming peds are circles with constant radius -->
+        <bmin mu="0.15" sigma="0.00000"/>
+        <amin mu="0.15" sigma="0.00000"/>
+        <tau mu="0.5" sigma="0.001"/>
+        <atau mu="0.0" sigma="0.00000"/>
+        <T mu="1" sigma="0.001"/>
+      </agent_parameters>
+
+    </model>
+  </operational_models>
+  <route_choice_models>
+    <router router_id="1" description="global_shortest">
+      <!--<parameters>
+                <write_VTK_files>true</write_VTK_files>
+        </parameters>-->
+    </router>
+  </route_choice_models>
+  <routing>
+    <goals>
+      <goal final="True" id="2" room_id="3" subroom_id="0">
+        <polygon>
+          <vertex px="6.46" py="35.79"/>
+          <vertex px="5.57" py="34.83"/>
+          <vertex px="10.43" py="30.32"/>
+          <vertex px="11.37" py="31.18"/>
+          <vertex px="6.46" py="35.79"/>
+        </polygon>
+      </goal>
+    </goals>
+  </routing>
+  <traffic_constraints>
+    <doors>
+      <door caption="NaN" state="open" trans_id="0"/>
+    </doors>
+  </traffic_constraints>
+  <agents operational_model_id="3">
+rdeu    <agents_distribution>
+      <group agent_parameter_id="1" goal_id="-1" group_id="1" number="100" room_id="0" router_id="1" subroom_id="1" x_min="-5" x_max="5" y_min="-5" y_max="5"/>
+      <group agent_parameter_id="1" goal_id="-1" group_id="1" number="100" room_id="0" router_id="1" subroom_id="1"/>
+    </agents_distribution>
+    <agents_sources>
+      <!-- <source greedy="true" agent_id="1" caption="b125940" group_id="1" id="1" time="1"/> -->
+      <!-- <source greedy="true" agent_id="2" caption="b125940" group_id="1" id="2" time="1"/> -->
+      <!-- <source greedy="true" agent_id="3" caption="b125940" group_id="1" id="3" time="3"/> -->
+      <!-- <source greedy="true" agent_id="4" caption="b125940" group_id="1" id="4" time="4"/> -->
+      <!-- <source greedy="true" agent_id="5" caption="b125940" group_id="1" id="5" time="5"/> -->
+      <!-- <source greedy="true" agent_id="6" caption="b125940" group_id="1" id="6" time="6"/> -->
+      <!-- <source greedy="true" agent_id="7" caption="b125940" group_id="1" id="7" time="7"/> -->
+      <!-- <source greedy="true" agent_id="8" caption="b125940" group_id="1" id="8" time="8"/> -->
+      <!-- <source greedy="true" agent_id="9" caption="b125940" group_id="1" id="9" time="9"/> -->
+      <!-- <source greedy="true" agent_id="10" caption="b125940" group_id="1" id="10" time="10"/> -->
+      <!-- <source caption="b125940" group_id="1" frequency="2" agents_max="10"/> -->
+    </agents_sources>
+  </agents>
+</JuPedSim>

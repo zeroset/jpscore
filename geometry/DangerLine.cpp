@@ -54,6 +54,10 @@ DangerLine::DangerLine() : Line()
 
 }
 
+DangerLine::~DangerLine()
+{
+}
+
 
 void DangerLine::setParameters(double fatalDistance, double startDistance, double alpha, double x_speed,
                                double y_speed) {
@@ -66,7 +70,7 @@ void DangerLine::setParameters(double fatalDistance, double startDistance, doubl
 }
 
 
-void DangerLine::expose(Pedestrian* ped)
+void DangerLine::expose(Pedestrian* ped) const
 {
     Point p = ped->GetPos();
     double fatality = abs(getFatalProbability(&p));
@@ -76,7 +80,7 @@ void DangerLine::expose(Pedestrian* ped)
     }
 }
 
-double DangerLine::getFatalProbability(const Point *p)
+double DangerLine::getFatalProbability(const Point *p) const
 {
     double distance = this->DistTo(*p);
     if(distance < _fatalDistance) //certain death

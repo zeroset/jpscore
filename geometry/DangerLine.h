@@ -53,7 +53,7 @@ private:
     double _x_speed;
     double _y_speed;
 
-    double getFatalProbability(const Point *p);
+    double getFatalProbability(const Point *p) const;
 
 public:
 
@@ -61,7 +61,7 @@ public:
 
     virtual ~DangerLine();
 
-    void expose(Pedestrian *ped);
+    void expose(Pedestrian *ped) const;
 
     void setParameters(double fatalDistance, double startDistance, double alpha, double x_speed, double y_speed);
 

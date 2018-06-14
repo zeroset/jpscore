@@ -43,11 +43,14 @@
 #include "Hline.h"
 #include "Obstacle.h"
 #include "Goal.h"
+#include "DangerLine.h"
 #include "../general/Configuration.h"
 
 class RoutingEngine;
 
 class Pedestrian;
+
+class DangerLine;
 
 class Transition;
 
