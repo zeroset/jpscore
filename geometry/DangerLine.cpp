@@ -35,8 +35,6 @@
 #include "Wall.h"
 
 
-int Line::_static_UID = 0;
-
 using namespace std;
 
 #define DEBUG 0
@@ -51,6 +49,7 @@ DangerLine::DangerLine() : Line()
     _alpha = 1;
     _x_speed = 0;
     _y_speed = 0;
+    _lastTimeUpdate = 0;
 
 }
 
@@ -93,14 +92,18 @@ double DangerLine::getFatalProbability(const Point *p) const
     }
 }
 
-void DangerLine::update(){
+void DangerLine::update(double time)
+{
+    if(_lastTimeUpdate == 0)
+        _lastTimeUpdate = time;
 
-    double new_x1 = this->GetPoint1()._x +_x_speed;
-    double new_y1 = this->GetPoint1()._y +_y_speed;
-    double new_x2 = this->GetPoint2()._x +_x_speed;
-    double new_y2 = this->GetPoint2()._y +_y_speed;
+    double new_x1 = this->GetPoint1()._x + (time-_lastTimeUpdate)*_x_speed;
+    double new_y1 = this->GetPoint1()._y + (time-_lastTimeUpdate)*_y_speed;
+    double new_x2 = this->GetPoint2()._x + (time-_lastTimeUpdate)*_x_speed;
+    double new_y2 = this->GetPoint2()._y + (time-_lastTimeUpdate)*_y_speed;
 
     this->SetPoint1(Point(new_x1,new_y1));
     this->SetPoint2(Point(new_x2,new_y2));
+    this->_lastTimeUpdate = time;
 
 }

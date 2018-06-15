@@ -734,18 +734,14 @@ void Building::UpdateGrid()
      _linkedCellGrid->Update(_allPedestians);
 }
 
-void Building::UpdateTransitions(double time)
+void Building::UpdateDynamicObjects(double time)
 {
     for (auto &transition : _transitions){
         transition.second->refreshStatus(time);
     }
 
-}
-
-void Building::UpdateDangerLine(){
-
      for(auto &dl : _dangerLines){
-          dl->update();
+          dl->update(time);
           for(auto &ped : _allPedestians){
                dl->expose(ped);
           }

@@ -197,9 +197,7 @@ public:
 
      void UpdateGrid();
 
-     void UpdateTransitions(double time);
-
-     void UpdateDangerLine();
+     void UpdateDynamicObjects(double time);
 
      void AddSurroundingRoom(); // add a final room (outside or world), that encompasses the complete geometry
 

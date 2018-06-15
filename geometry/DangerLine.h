@@ -52,6 +52,7 @@ private:
     double _alpha;
     double _x_speed;
     double _y_speed;
+    double _lastTimeUpdate;
 
     double getFatalProbability(const Point *p) const;
 
@@ -65,7 +66,7 @@ public:
 
     void setParameters(double fatalDistance, double startDistance, double alpha, double x_speed, double y_speed);
 
-    void update();
+    void update(double time);
 };
 
 #endif  /* _LINE_H */
