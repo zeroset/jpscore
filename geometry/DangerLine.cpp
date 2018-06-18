@@ -86,7 +86,9 @@ double DangerLine::getFatalProbability(const Point *p) const
     {
         return 100;
     }else if (distance < _startDistance){
-        return pow((1-(distance - _fatalDistance)/(_startDistance - _fatalDistance)),_alpha);
+        // mortality chance is (d/dmax)^alpha where d is how close the ped is
+        // and dmax the minimum distance allowed before certain death
+        return 100*pow((1-(distance - _fatalDistance)/(_startDistance - _fatalDistance)),_alpha);
     }else{
         return 0;
     }
@@ -94,7 +96,7 @@ double DangerLine::getFatalProbability(const Point *p) const
 
 void DangerLine::update(double time)
 {
-    if(_lastTimeUpdate == 0)
+    if(_lastTimeUpdate == 0)    //first time calling
         _lastTimeUpdate = time;
 
     double new_x1 = this->GetPoint1()._x + (time-_lastTimeUpdate)*_x_speed;

@@ -19,7 +19,7 @@
     <model operational_model_id="3" description="Tordeux2015">
       <model_parameters>
         <solver>euler</solver>
-        <stepsize>0.01</stepsize>
+        <stepsize>0.05</stepsize>
         <exit_crossing_strategy>9</exit_crossing_strategy>
         <delta_h>0.125</delta_h>
         <wall_avoid_distance>0.8</wall_avoid_distance>

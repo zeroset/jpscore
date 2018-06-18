@@ -54,22 +54,48 @@ private:
     double _y_speed;
     double _lastTimeUpdate;
 
+    /**
+     * @param p a point close to the line
+     * @return double between 0 and 100, 100 = certain death
+     */
     double getFatalProbability(const Point *p) const;
 
 public:
 
+    /**
+     * The default constructor
+     * DONT FORGET TO CALL DangerLine::setParameters(...)
+     */
     DangerLine();
 
     virtual ~DangerLine();
 
+    /**
+     * Set V0 norm (speed) of the pedestrian at 0
+     * with a random chance bigger the closer to the line
+     * @param ped the pedestrian to expose
+     */
     void expose(Pedestrian *ped) const;
 
+    /**
+     * set the characteristics of the line
+     * @param fatalDistance the distance from the line where there is a 100% chance of dying
+     * @param startDistance the distance from the line after which there is no danger
+     * @param alpha must be > 0, default 1, the exponent of the exposition formula
+     * formula = 100*pow((1-(distance - _fatalDistance)/(_startDistance - _fatalDistance)),_alpha)
+     * @param x_speed the horizontal speed of the line, in meter/sec
+     * @param y_speed the vertical speed of the line, in meter/sec
+     */
     void setParameters(double fatalDistance, double startDistance, double alpha, double x_speed, double y_speed);
 
+    /**
+     * move the line according to its own speed
+     * @param time simulation time
+     */
     void update(double time);
 };
 
-#endif  /* _LINE_H */
+#endif  /* _DANGERLINE_H */
 
 
 
