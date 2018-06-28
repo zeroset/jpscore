@@ -53,6 +53,8 @@ private:
     double _x_speed;
     double _y_speed;
     double _lastTimeUpdate;
+    double _lastTimeExposure;
+    bool _expositionReady;
 
     /**
      * @param p a point close to the line
@@ -75,7 +77,7 @@ public:
      * with a random chance bigger the closer to the line
      * @param ped the pedestrian to expose
      */
-    void expose(Pedestrian *ped) const;
+    void expose(Pedestrian *ped);
 
     /**
      * set the characteristics of the line
@@ -93,6 +95,9 @@ public:
      * @param time simulation time
      */
     void update(double time);
+
+    void print();
+
 };
 
 #endif  /* _DANGERLINE_H */

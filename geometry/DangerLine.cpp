@@ -33,6 +33,7 @@
 #include "../pedestrian/Pedestrian.h"
 #include "Line.h"
 #include "Wall.h"
+#include "../IO/OutputHandler.cpp"
 
 
 using namespace std;
@@ -50,6 +51,8 @@ DangerLine::DangerLine() : Line()
     _x_speed = 0;
     _y_speed = 0;
     _lastTimeUpdate = 0;
+    _lastTimeExposure = 0;
+    _expositionReady = true;
 
 }
 
@@ -69,13 +72,23 @@ void DangerLine::setParameters(double fatalDistance, double startDistance, doubl
 }
 
 
-void DangerLine::expose(Pedestrian* ped) const
+void DangerLine::expose(Pedestrian* ped)
 {
-    Point p = ped->GetPos();
-    double fatality = abs(getFatalProbability(&p));
-    double fate = rand() % 100;
-    if( fate < fatality ){
-        ped->SetV0Norm(0,0,0,0,0,0,0);
+    //We don't want to expose every step, but every second
+
+    if(_expositionReady) {
+        //std::cout<<"OK++ EXPOSE: "<<_lastTimeUpdate<<" "<<_lastTimeExposure<<std::endl;
+        _lastTimeExposure = _lastTimeUpdate;
+        Point p = ped->GetPos();
+        double fatality = abs(getFatalProbability(&p));
+        double fate = rand() % 100;
+        if (fate < fatality) {
+            //we "kill" the pedestrian by making it not moving
+            //TODO improve this part by making the pedestrian able to be walked over
+            ped->SetV0Norm(0, 0, 0, 0, 0, 0, 0);
+        }
+    }else{
+        //std::cout<<"KO---- EXPOSE: "<<_lastTimeUpdate<<" "<<_lastTimeExposure<<std::endl;
     }
 }
 
@@ -99,6 +112,16 @@ void DangerLine::update(double time)
     if(_lastTimeUpdate == 0)    //first time calling
         _lastTimeUpdate = time;
 
+    if(_lastTimeExposure == 0)
+        _lastTimeExposure = time;
+
+    if(_expositionReady){
+        _expositionReady = false;
+    }else if(time - _lastTimeExposure > 1){
+        _expositionReady = true;
+    }
+
+
     double new_x1 = this->GetPoint1()._x + (time-_lastTimeUpdate)*_x_speed;
     double new_y1 = this->GetPoint1()._y + (time-_lastTimeUpdate)*_y_speed;
     double new_x2 = this->GetPoint2()._x + (time-_lastTimeUpdate)*_x_speed;
@@ -107,5 +130,17 @@ void DangerLine::update(double time)
     this->SetPoint1(Point(new_x1,new_y1));
     this->SetPoint2(Point(new_x2,new_y2));
     this->_lastTimeUpdate = time;
+    //For the moment, danger line trajectories are written in the console
+    this->print();
+
+}
+
+void DangerLine::print()
+{
+    std::cout<<_lastTimeUpdate<<" "
+             <<this->GetPoint1()._x<<" "
+             <<this->GetPoint1()._y<<" "
+             <<this->GetPoint2()._x<<" "
+             <<this->GetPoint2()._y<<std::endl;
 
 }

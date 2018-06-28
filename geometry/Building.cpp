@@ -149,6 +149,9 @@ Building::~Building()
           iter!=_goals.end(); ++iter) {
           delete iter->second;
      }
+    for (unsigned int p = 0; p<_dangerLines.size(); p++) {
+        delete _dangerLines[p];
+    }
 }
 
 Configuration* Building::GetConfig() const {
