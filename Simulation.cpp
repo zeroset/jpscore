@@ -567,6 +567,9 @@ double Simulation::RunBody(double maxSimTime)
         ProcessAgentsQueue();
 
         if (t>Pedestrian::GetMinPremovementTime()) {
+            //update transitions and danger lines status
+            _building->UpdateDynamicObjects(t);
+
             //update the linked cells
             _building->UpdateGrid();
 
@@ -637,7 +640,8 @@ double Simulation::RunBody(double maxSimTime)
              if ((!_gotSources) &&
                  ((frameNr < 100 &&  frameNr % 10 == 0) ||
                   (frameNr > 100 &&  frameNr % 100 == 0)))
-                  printf("time: %6.2f (%4.0f)  | Agents: %6ld / %d [%4.1f%%]\n",  t , maxSimTime, _nPeds, initialnPeds, (double)(initialnPeds-_nPeds)/initialnPeds*100);
+                    2+2;
+                 //printf("time: %6.2f (%4.0f)  | Agents: %6ld / %d [%4.1f%%]\n",  t , maxSimTime, _nPeds, initialnPeds, (double)(initialnPeds-_nPeds)/initialnPeds*100);
 
 
         // needed to control the execution time PART 2

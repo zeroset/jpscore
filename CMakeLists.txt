@@ -302,6 +302,7 @@ geometry/Room.cpp
 geometry/Wall.cpp
 geometry/Goal.cpp
 geometry/WaitingArea.cpp
+        geometry/DangerLine.cpp
 
 IO/GeoFileParser.cpp
 IO/IniFileParser.cpp
@@ -531,6 +532,7 @@ geometry/Obstacle.h
 geometry/SubRoom.h
 geometry/Goal.h
 geometry/WaitingArea.h
+        geometry/DangerLine.h
 
 IO/GeoFileParser.h
 IO/IniFileParser.h

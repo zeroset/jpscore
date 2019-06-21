@@ -49,7 +49,7 @@ private:
     // of the flow
     int _partialDoorUsage; //door usage in _DT
     double  _lastFlowMeasurement;
-
+      double _waitingTime;
 
     std::string _flowAtExit;
     DoorState _state;
@@ -227,6 +227,23 @@ public:
     void SetState(DoorState _state);
 
     std::string toString() const;
+
+           /**
+     * Set the time a door is unusable after being taken
+     */
+     void SetWaitingTime(double time);
+
+
+     /**
+      * check if a transition is open at a specific time
+      * @param time, the time to check
+      */
+     void refreshStatus(double time);
+
+
+      
 };
+
+
 
 #endif  /* _CROSSING_H */

@@ -48,6 +48,7 @@ class NavLine;
 class Router;
 class Knowledge;
 class WalkingSpeed;
+class StartDistribution;
 class Pedestrian
 {
 private:

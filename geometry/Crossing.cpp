@@ -45,6 +45,7 @@ Crossing::Crossing()
      _partialDoorUsage = 0;
      _closingTime = 0;
 
+     _waitingTime=0;
      _state = DoorState::OPEN;
 }
 
@@ -361,4 +362,25 @@ std::string Crossing::toString() const
 
      }
      return tmp.str();
+}
+
+
+//METHOD IN TRIAL
+void Transition::refreshStatus(double time)
+{
+
+     if(_lastPassingTime == 0 || _lastPassingTime + _waitingTime < time)
+     {
+         //std::cout<<"DEBUG: OPEN"<<std::endl;
+         this->Open();
+     } else {
+         //std::cout<<"DEBUG: CLOSED"<<std::endl;
+         //std::cout<<"DEBUG: "<<_lastPassingTime<<" "<<_waitingTime<<" "<<time<<" "<<std::endl;           
+         this->Close();
+     }
+}
+
+void Transition::SetWaitingTime(double time)
+{
+     _waitingTime=time;
 }

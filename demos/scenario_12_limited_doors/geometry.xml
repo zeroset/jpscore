@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<geometry version="0.8" caption="corner" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://xsd.jupedsim.org/jps_geometry.xsd" unit="m">
+  <rooms>
+    <room id="0" caption="floor">
+      <subroom id="1" caption="Room 1" class="Not specified" A_x="0" B_y="0" C_z="0">
+        <polygon caption="wall">
+          <vertex px="-15" py="15"/>
+          <vertex px="-15" py="-15"/>
+        </polygon>
+        <polygon caption="wall">
+          <vertex px="15" py="-15"/>
+          <vertex px="15" py="15"/>
+        </polygon>
+        <polygon caption="wall">
+          <vertex px="-15" py="-15"/>
+          <vertex px="15" py="-15"/>
+        </polygon>
+      </subroom>
+      <crossings/>
+    </room>
+  </rooms>
+  <transitions>
+    <transition id="0" caption="NaN" type="NaN" room1_id="0" subroom1_id="1" room2_id="-1" subroom2_id="-1" waiting_time="5">
+      <vertex px="-15" py="15"/>
+      <vertex px="-5" py="15"/>
+    </transition>
+    <transition id="1" caption="NaN" type="NaN" room1_id="0" subroom1_id="1" room2_id="-1" subroom2_id="-1" waiting_time="5">
+      <vertex px="-5" py="15"/>
+      <vertex px="0" py="15"/>
+    </transition>
+    <transition id="2" caption="NaN" type="NaN" room1_id="0" subroom1_id="1" room2_id="-1" subroom2_id="-1" waiting_time="5">
+      <vertex px="0" py="15"/>
+      <vertex px="5" py="15"/>
+    </transition>
+    <transition id="3" caption="NaN" type="NaN" room1_id="0" subroom1_id="1" room2_id="-1" subroom2_id="-1" waiting_time="5">
+      <vertex px="5" py="15"/>
+      <vertex px="10" py="15"/>
+    </transition>
+    <transition id="4" caption="NaN" type="NaN" room1_id="0" subroom1_id="1" room2_id="-1" subroom2_id="-1" waiting_time="5">
+      <vertex px="10" py="15"/>
+      <vertex px="15" py="15"/>
+    </transition>
+  </transitions>
+  <danger_lines>
+  	<danger_line id="1" x_speed="0.5" y_speed="0" fatal_distance="1" danger_distance="10" alpha="2000">
+  		<vertex px="-15" py="-15"/>
+        <vertex px="-15" py="15"/>
+    </danger_line>
+  </danger_lines>
+</geometry>

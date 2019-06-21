@@ -36,6 +36,7 @@ class Room;
 
 class Transition : public Crossing {
 private:
+
     Room* _room2;
     std::string _type;
     // number of agents that passed that exit
@@ -88,6 +89,7 @@ public:
 
     virtual void WriteToErrorLog() const;
     virtual std::string GetDescription() const; // TraVisTo Ausgabe
+
 };
 
 #endif  /* _TRANSITION_H */

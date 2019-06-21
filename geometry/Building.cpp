@@ -133,6 +133,7 @@ Building::~Building()
       delete _linkedCellGrid;
 #endif
 
+
       if (_pathWayStream.is_open())
             _pathWayStream.close();
 
@@ -152,6 +153,9 @@ Building::~Building()
            iter!=_goals.end(); ++iter) {
             delete iter->second;
       }
+    for (unsigned int p = 0; p<_dangerLines.size(); p++) {
+        delete _dangerLines[p];
+    }
 }
 
 Configuration* Building::GetConfig() const {
@@ -1298,6 +1302,11 @@ bool Building::AddTrainTimeTable(std::shared_ptr<TrainTimeTable> TTT)
       return true;
 }
 
+bool Building::AddDangerLine(DangerLine* dl){
+     _dangerLines.emplace_back(dl);
+     return true;
+}
+
 const map<int, Crossing*>& Building::GetAllCrossings() const
 {
       return _crossings;
@@ -1330,7 +1339,7 @@ const std::map<int, std::shared_ptr<Platform> >& Building::GetPlatforms() const
 }
 
 bool Building::AddPlatform(std::shared_ptr<Platform> P)
-{
+      {
       if (_platforms.count(P->id)!=0) {
             Log->Write("WARNING: Duplicate platform found [%d]", P->id);
       }
@@ -1338,6 +1347,11 @@ bool Building::AddPlatform(std::shared_ptr<Platform> P)
       return true;
 
 }
+const vector<DangerLine*>& Building::GetAllDangerLines() const
+{
+     return _dangerLines;
+}
+
 
 const map<int, Goal*>& Building::GetAllGoals() const
 {
@@ -1571,6 +1585,21 @@ void Building::UpdateGrid()
 {
 //     std::cout << Pedestrian::GetGlobalTime() <<":\t\tBuilding::UpdateGrid from: " << std::this_thread::get_id() <<std::endl;
       _linkedCellGrid->Update(_allPedestians);
+}
+
+void Building::UpdateDynamicObjects(double time)
+{
+    for (auto &transition : _transitions){
+        transition.second->refreshStatus(time);
+    }
+
+     for(auto &dl : _dangerLines){
+          dl->update(time);
+          for(auto &ped : _allPedestians){
+               dl->expose(ped);
+          }
+     }
+
 }
 
 void Building::InitGrid()

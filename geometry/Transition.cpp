@@ -37,7 +37,6 @@ using namespace std;
 
 Transition::Transition() : Crossing()
 {
-//     _isOpen = true;
      _room2 = nullptr;
 //     _lastTickTime1 = 0;
 //     _lastTickTime2 = 0;
@@ -66,6 +65,7 @@ void Transition::SetRoom2(Room* r)
 //{
 //     return Crossing::IsOpen();
 //}
+
 
 
 Room* Transition::GetRoom2() const

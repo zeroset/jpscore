@@ -43,6 +43,7 @@
 #include "Hline.h"
 #include "Obstacle.h"
 #include "Goal.h"
+#include "DangerLine.h"
 #include "../general/Configuration.h"
 
 typedef std::pair<Point, Wall> PointWall;
@@ -86,6 +87,8 @@ class RoutingEngine;
 
 class Pedestrian;
 
+class DangerLine;
+
 class Transition;
 
 class LCGrid;
@@ -106,6 +109,7 @@ private:
      std::string _geometryFilename;
      LCGrid* _linkedCellGrid;
      std::vector<Pedestrian*> _allPedestians;
+     std::vector<DangerLine*> _dangerLines;
      std::map<int, std::shared_ptr<Room> > _rooms;
      std::map<int, Crossing*> _crossings;
      std::map<int, Transition*> _transitions;
@@ -240,6 +244,8 @@ public:
 
      void UpdateGrid();
 
+     void UpdateDynamicObjects(double time);
+
      void AddSurroundingRoom(); // add a final room (outside or world), that encompasses the complete geometry
 
      const std::map<int, Crossing*>& GetAllCrossings() const;
@@ -256,10 +262,13 @@ public:
 
      const std::map<int, std::shared_ptr<Platform> >& GetPlatforms() const;
 
+
      const std::vector<Wall> GetTrackWalls(Point TrackStart, Point TrackEnd, int & room_id, int & subroom_id) const;
      const std::vector<std::pair<PointWall, PointWall > > GetIntersectionPoints(const std::vector<Transition> doors, const std::vector<Wall>) const;
 
-     // ------------------------------------
+     const std::vector<DangerLine*>& GetAllDangerLines() const;
+      bool AddDangerLine(DangerLine* dl);
+      
      bool AddCrossing(Crossing* line);
 
      bool RemoveTransition(Transition * line);
@@ -270,11 +279,15 @@ public:
 
      bool AddGoal(Goal* goal);
 
+
      bool AddTrainType(std::shared_ptr<TrainType> TT);
 
      bool AddTrainTimeTable(std::shared_ptr<TrainTimeTable> TTT);
 
      bool AddPlatform(std::shared_ptr<Platform> P);
+
+
+
 
      const std::string& GetProjectRootDir() const;
 
