@@ -366,7 +366,7 @@ std::string Crossing::toString() const
 
 
 //METHOD IN TRIAL
-void Transition::refreshStatus(double time)
+void Crossing::refreshStatus(double time)
 {
 
      if(_lastPassingTime == 0 || _lastPassingTime + _waitingTime < time)
@@ -380,7 +380,7 @@ void Transition::refreshStatus(double time)
      }
 }
 
-void Transition::SetWaitingTime(double time)
+void Crossing::SetWaitingTime(double time)
 {
      _waitingTime=time;
 }
