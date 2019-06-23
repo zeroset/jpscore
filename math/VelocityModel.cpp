@@ -493,7 +493,10 @@ Point VelocityModel::ForceRepPed(Pedestrian* ped1, Pedestrian* ped2, int periodi
       double condition1 = ei.ScalarProduct(ep12); // < e_i , e_ij > should be positive
       condition1 = (condition1>0)?condition1:0; // abs
 
-      R_ij = - _aPed * exp((l-Distance)/_DPed);
+      double factor = 0.5; // influence of dead people
+      double life = (ped1->IsAlive())?factor:1.0;
+
+      R_ij = - _aPed * life * exp((l-Distance)/_DPed);
       F_rep = ep12 * R_ij;
 
      return F_rep;
