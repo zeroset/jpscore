@@ -42,9 +42,9 @@
     </transition>
   </transitions>
   <danger_lines>
-  	<danger_line id="1" x_speed="0.5" y_speed="0" fatal_distance="1" danger_distance="10" alpha="2000">
-  		<vertex px="-15" py="-15"/>
-        <vertex px="-15" py="15"/>
+        <danger_line id="1" x_speed="0.5" y_speed="0" fatal_distance="1" danger_distance="10" alpha="3">
+          <vertex px="-15" py="-15"/>
+          <vertex px="-15" py="15"/>
     </danger_line>
   </danger_lines>
 </geometry>

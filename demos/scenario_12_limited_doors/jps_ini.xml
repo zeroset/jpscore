@@ -2,17 +2,18 @@
   <!-- seed used for initialising random generator -->
   <seed>12542</seed>
   <!-- geometry file -->
+  <!-- <geometry>correct_geometry2.xml</geometry> -->
   <geometry>geometry.xml</geometry>
   <max_sim_time>100</max_sim_time>
   <!--  <events_file>events_list.xml</events_file> -->
   <!-- trajectories file and format -->
-  <trajectories format="xml-plain" fps="8">
-    <file location="jps_traj.xml"/>
+  <trajectories format="plain" fps="8">
+    <file location="jps_traj.txt"/>
     <!--     <socket hostname="127.0.0.1" port="8989"/> -->
   </trajectories>
   <!-- where to store the logs -->
   <logfile>jps_log</logfile>
-  <!--<show_statistics>true</show_statistics>-->
+  <show_statistics>true</show_statistics>
   <num_threads>4</num_threads>
   <show_statistics>true</show_statistics>
   <operational_models>
@@ -81,26 +82,16 @@
   </routing>
   <traffic_constraints>
     <doors>
-      <door caption="NaN" state="open" trans_id="0"/>
+      <door caption="NaN" state="open" outflow="0.5" trans_id="0" max_agents="10"/>
+      <door caption="NaN" state="open" trans_id="1" />
     </doors>
   </traffic_constraints>
   <agents operational_model_id="3">
-rdeu    <agents_distribution>
-      <group agent_parameter_id="1" goal_id="-1" group_id="1" number="100" room_id="0" router_id="1" subroom_id="1" x_min="-5" x_max="5" y_min="-5" y_max="5"/>
+    <agents_distribution>
+      <!-- <group agent_parameter_id="1" goal_id="-1" group_id="1" number="100" room_id="0" router_id="1" subroom_id="1" x_min="-5" x_max="5" y_min="-5" y_max="5"/> -->
       <group agent_parameter_id="1" goal_id="-1" group_id="1" number="100" room_id="0" router_id="1" subroom_id="1"/>
     </agents_distribution>
     <agents_sources>
-      <!-- <source greedy="true" agent_id="1" caption="b125940" group_id="1" id="1" time="1"/> -->
-      <!-- <source greedy="true" agent_id="2" caption="b125940" group_id="1" id="2" time="1"/> -->
-      <!-- <source greedy="true" agent_id="3" caption="b125940" group_id="1" id="3" time="3"/> -->
-      <!-- <source greedy="true" agent_id="4" caption="b125940" group_id="1" id="4" time="4"/> -->
-      <!-- <source greedy="true" agent_id="5" caption="b125940" group_id="1" id="5" time="5"/> -->
-      <!-- <source greedy="true" agent_id="6" caption="b125940" group_id="1" id="6" time="6"/> -->
-      <!-- <source greedy="true" agent_id="7" caption="b125940" group_id="1" id="7" time="7"/> -->
-      <!-- <source greedy="true" agent_id="8" caption="b125940" group_id="1" id="8" time="8"/> -->
-      <!-- <source greedy="true" agent_id="9" caption="b125940" group_id="1" id="9" time="9"/> -->
-      <!-- <source greedy="true" agent_id="10" caption="b125940" group_id="1" id="10" time="10"/> -->
-      <!-- <source caption="b125940" group_id="1" frequency="2" agents_max="10"/> -->
     </agents_sources>
   </agents>
 </JuPedSim>
