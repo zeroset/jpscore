@@ -55,7 +55,7 @@ private:
     double _lastTimeUpdate;
     double _lastTimeExposure;
     bool _expositionReady;
-
+     FileHandler * _fdangerlines;
     /**
      * @param p a point close to the line
      * @return double between 0 and 100, 100 = certain death
@@ -96,19 +96,8 @@ public:
      */
     void update(double time);
 
-    void print();
+    void outputDangerLine();
 
 };
 
 #endif  /* _DANGERLINE_H */
-
-
-
-
-
-
-
-
-
-
-

@@ -35,7 +35,6 @@
 #include "Wall.h"
 #include "../IO/OutputHandler.cpp"
 
-
 using namespace std;
 
 #define DEBUG 0
@@ -53,6 +52,7 @@ DangerLine::DangerLine() : Line()
     _lastTimeUpdate = 0;
     _lastTimeExposure = 0;
     _expositionReady = true;
+    _fdangerlines = new FileHandler("dangerlines.txt");
 
 }
 
@@ -77,7 +77,7 @@ void DangerLine::expose(Pedestrian* ped)
     //We don't want to expose every step, but every second
 
     if(_expositionReady) {
-        //std::cout<<"OK++ EXPOSE: "<<_lastTimeUpdate<<" "<<_lastTimeExposure<<std::endl;
+        // std::cout<<"OK++ EXPOSE: "<<_lastTimeUpdate<<" "<<_lastTimeExposure<<std::endl;
         _lastTimeExposure = _lastTimeUpdate;
         Point p = ped->GetPos();
         double fatality = abs(getFatalProbability(&p));
@@ -86,6 +86,7 @@ void DangerLine::expose(Pedestrian* ped)
             //we "kill" the pedestrian by making it not moving
             //TODO improve this part by making the pedestrian able to be walked over
             ped->SetV0Norm(0, 0, 0, 0, 0, 0, 0);
+            ped->Kill();
         }
     }else{
         //std::cout<<"KO---- EXPOSE: "<<_lastTimeUpdate<<" "<<_lastTimeExposure<<std::endl;
@@ -101,7 +102,13 @@ double DangerLine::getFatalProbability(const Point *p) const
     }else if (distance < _startDistance){
         // mortality chance is (d/dmax)^alpha where d is how close the ped is
         // and dmax the minimum distance allowed before certain death
-        return 100*pow((1-(distance - _fatalDistance)/(_startDistance - _fatalDistance)),_alpha);
+
+         double p = 100*pow((1-(distance - _fatalDistance)/(_startDistance - _fatalDistance)),_alpha);
+         std:: << "----\n distance" << distance << " start " << " "  << _startDistance << " fatal "  <<  _fatalDistance << "\n";
+                                                                                                                           std::cout << ">> p= " >> p >> " alpha " >> _alpha >> "\n";
+
+                                                                                                                           return p;
+
     }else{
         return 0;
     }
@@ -131,16 +138,16 @@ void DangerLine::update(double time)
     this->SetPoint2(Point(new_x2,new_y2));
     this->_lastTimeUpdate = time;
     //For the moment, danger line trajectories are written in the console
-    this->print();
+    this->outputDangerLine();
 
 }
 
-void DangerLine::print()
+void DangerLine::outputDangerLine()
 {
-    std::cout<<_lastTimeUpdate<<" "
-             <<this->GetPoint1()._x<<" "
-             <<this->GetPoint1()._y<<" "
-             <<this->GetPoint2()._x<<" "
-             <<this->GetPoint2()._y<<std::endl;
-
+     _fdangerlines->Write("%.2f,%.2f,%.2f,%.2f,%.2f",
+                          _lastTimeUpdate,
+                          this->GetPoint1()._x,
+                          this->GetPoint1()._y,
+                          this->GetPoint2()._x,
+                          this->GetPoint2()._y);
 }
