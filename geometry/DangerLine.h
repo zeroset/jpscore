@@ -58,7 +58,7 @@ private:
      FileHandler * _fdangerlines;
     /**
      * @param p a point close to the line
-     * @return double between 0 and 100, 100 = certain death
+     * @return double between 0 and 1, 1 = certain death
      */
     double getFatalProbability(const Point *p) const;
 
@@ -75,9 +75,10 @@ public:
     /**
      * Set V0 norm (speed) of the pedestrian at 0
      * with a random chance bigger the closer to the line
+     * and set life status to "Dead"
      * @param ped the pedestrian to expose
      */
-    void expose(Pedestrian *ped);
+     void expose(Pedestrian *ped, double seed);
 
     /**
      * set the characteristics of the line
@@ -97,6 +98,7 @@ public:
     void update(double time);
 
     void outputDangerLine();
+     double GetRandomNumber();
 
 };
 

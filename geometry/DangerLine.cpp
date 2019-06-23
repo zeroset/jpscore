@@ -34,6 +34,7 @@
 #include "Line.h"
 #include "Wall.h"
 #include "../IO/OutputHandler.cpp"
+#include <chrono>
 
 using namespace std;
 
@@ -71,8 +72,18 @@ void DangerLine::setParameters(double fatalDistance, double startDistance, doubl
 
 }
 
+double DangerLine::GetRandomNumber()
+{
+     std::mt19937_64 rng;
+     // initialize the random number generator with time-dependent seed
+     uint64_t timeSeed = std::chrono::high_resolution_clock::now().time_since_epoch().count();
+     rng.seed(timeSeed);
+     // initialize a uniform distribution between 0 and 1
+     std::uniform_real_distribution<double> unif(0, 1);
+     return unif(rng);
+}
 
-void DangerLine::expose(Pedestrian* ped)
+void DangerLine::expose(Pedestrian* ped, double seed)
 {
     //We don't want to expose every step, but every second
 
@@ -80,13 +91,15 @@ void DangerLine::expose(Pedestrian* ped)
         // std::cout<<"OK++ EXPOSE: "<<_lastTimeUpdate<<" "<<_lastTimeExposure<<std::endl;
         _lastTimeExposure = _lastTimeUpdate;
         Point p = ped->GetPos();
-        double fatality = abs(getFatalProbability(&p));
-        double fate = rand() % 100;
+        double fatality = getFatalProbability(&p);
+        double fate = GetRandomNumber();
+        std::cerr << "  " << fate << "   " << fatality << "\n";
         if (fate < fatality) {
-            //we "kill" the pedestrian by making it not moving
-            //TODO improve this part by making the pedestrian able to be walked over
-            ped->SetV0Norm(0, 0, 0, 0, 0, 0, 0);
-            ped->Kill();
+
+             //we "kill" the pedestrian by making it not moving
+             //TODO improve this part by making the pedestrian able to be walked over
+             ped->SetV0Norm(0, 0, 0, 0, 0, 0, 0);
+             ped->Kill();
         }
     }else{
         //std::cout<<"KO---- EXPOSE: "<<_lastTimeUpdate<<" "<<_lastTimeExposure<<std::endl;
@@ -96,18 +109,17 @@ void DangerLine::expose(Pedestrian* ped)
 double DangerLine::getFatalProbability(const Point *p) const
 {
     double distance = this->DistTo(*p);
-    if(distance < _fatalDistance) //certain death
+    if(distance <= _fatalDistance) //certain death
     {
-        return 100;
+        return 1;
     }else if (distance < _startDistance){
         // mortality chance is (d/dmax)^alpha where d is how close the ped is
         // and dmax the minimum distance allowed before certain death
 
-         double p = 100*pow((1-(distance - _fatalDistance)/(_startDistance - _fatalDistance)),_alpha);
-         std:: << "----\n distance" << distance << " start " << " "  << _startDistance << " fatal "  <<  _fatalDistance << "\n";
-                                                                                                                           std::cout << ">> p= " >> p >> " alpha " >> _alpha >> "\n";
-
-                                                                                                                           return p;
+         double p = pow((1-(distance - _fatalDistance)/(_startDistance - _fatalDistance)),_alpha);
+         // std::cout << "----\n distance " << distance << " start " << " "  << _startDistance << " fataldistance "  <<  _fatalDistance << "\n";
+         // std::cout << ">> p= " << p << " alpha " << _alpha << "\n";
+                                                              return p;
 
     }else{
         return 0;

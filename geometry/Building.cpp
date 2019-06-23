@@ -729,7 +729,7 @@ bool Building::InitPlatforms()
 
             }//subroom
       }//rooms
-	  return true;
+          return true;
 }
       bool Building::InitInsideGoals()
       {
@@ -1587,16 +1587,16 @@ void Building::UpdateGrid()
       _linkedCellGrid->Update(_allPedestians);
 }
 
-void Building::UpdateDynamicObjects(double time)
+void Building::UpdateDynamicObjects(double time, double seed)
 {
-    for (auto &transition : _transitions){
-        transition.second->refreshStatus(time);
-    }
+    // for (auto &transition : _transitions){
+    //     transition.second->refreshStatus(time);
+    // }
 
      for(auto &dl : _dangerLines){
           dl->update(time);
           for(auto &ped : _allPedestians){
-               dl->expose(ped);
+               dl->expose(ped, seed);
           }
      }
 

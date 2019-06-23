@@ -244,7 +244,7 @@ public:
 
      void UpdateGrid();
 
-     void UpdateDynamicObjects(double time);
+     void UpdateDynamicObjects(double time, double seed);
 
      void AddSurroundingRoom(); // add a final room (outside or world), that encompasses the complete geometry
 
@@ -268,7 +268,7 @@ public:
 
      const std::vector<DangerLine*>& GetAllDangerLines() const;
       bool AddDangerLine(DangerLine* dl);
-      
+
      bool AddCrossing(Crossing* line);
 
      bool RemoveTransition(Transition * line);

@@ -568,7 +568,7 @@ double Simulation::RunBody(double maxSimTime)
 
         if (t>Pedestrian::GetMinPremovementTime()) {
             //update transitions and danger lines status
-            _building->UpdateDynamicObjects(t);
+             _building->UpdateDynamicObjects(t, _seed);
 
             //update the linked cells
             _building->UpdateGrid();
