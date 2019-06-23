@@ -1271,3 +1271,13 @@ void Pedestrian::LeaveGoal()
 {
      _insideGoal = false;
 }
+
+bool Pedestrian::IsAlive() const
+{
+     return _alive == true;
+
+}
+void Pedestrian::Kill()
+{
+     _alive = false;
+}

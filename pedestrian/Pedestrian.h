@@ -155,6 +155,7 @@ private:
 
      int _lastGoalID = -1;
      bool _insideGoal =false;
+     bool _alive=true;
 
 
 public:
@@ -508,6 +509,10 @@ public:
      int GetLastGoalID() const;
 
      bool IsInsideGoal() const;
+
+     bool IsAlive() const;
+     void Kill();
+
 
 };
 
