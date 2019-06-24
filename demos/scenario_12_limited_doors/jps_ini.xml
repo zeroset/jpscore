@@ -26,8 +26,9 @@
         <wall_avoid_distance>0.8</wall_avoid_distance>
         <use_wall_avoidance>true</use_wall_avoidance>
         <linkedcells enabled="true" cell_size="2.2"/>
-        <force_ped a="5" D="0.1"/>
+        <force_ped a="5" D="0.1" death_factor="0.1"/>
         <force_wall a="1" D="0.02"/>
+
       </model_parameters>
       <agent_parameters agent_parameter_id="1">
         <v0 mu="1.34" sigma="0.0"/>

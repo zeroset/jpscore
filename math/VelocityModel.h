@@ -73,6 +73,7 @@ private:
 
      double _aWall;
      double _DWall;
+     double _death_factor;
 
      /**
       * Optimal velocity function \f$ V(spacing) =\min{v_0, \max{0, (s-l)/T}}  \f$
@@ -138,7 +139,7 @@ private:
 public:
 
      VelocityModel(std::shared_ptr<DirectionStrategy> dir, double aped, double Dped,
-                   double awall, double Dwall);
+                   double awall, double Dwall, double death_factor);
      virtual ~VelocityModel(void);
 
 
@@ -151,6 +152,7 @@ public:
       *
       */
      double GetaPed() const;
+     double GetDeathFactor() const;
 
      /**
       * @todo What is this parameter doing?

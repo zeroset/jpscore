@@ -51,7 +51,7 @@ using std::vector;
 using std::string;
 
 VelocityModel::VelocityModel(std::shared_ptr<DirectionStrategy> dir, double aped, double Dped,
-                             double awall, double Dwall)
+                             double awall, double Dwall, double death_factor)
 {
      _direction = dir;
      // Force_rep_PED Parameter
@@ -60,6 +60,8 @@ VelocityModel::VelocityModel(std::shared_ptr<DirectionStrategy> dir, double aped
      // Force_rep_WALL Parameter
      _aWall = awall;
      _DWall = Dwall;
+     _death_factor = death_factor;
+
 }
 
 
@@ -273,6 +275,7 @@ void VelocityModel::ComputeNextTimeStep(double current, double deltaT, Building*
                 // calculate min spacing
                 std::sort(spacings.begin(), spacings.end(), sort_pred());
                 double spacing = spacings[0].first;
+                int id_nearest_ped = spacings[0].second;
                 //============================================================
                 // TODO: Hack for Head on situations: ped1 x ------> | <------- x ped2
                 if(0 && direction.NormSquare() < 0.5)
@@ -286,7 +289,25 @@ void VelocityModel::ComputeNextTimeStep(double current, double deltaT, Building*
                 //============================================================
                 //double winkel = spacings[0].second;
                 //Point tmp;
-                Point speed = direction.Normalized() *OptimalSpeed(ped, spacing);
+                double optSpeed = OptimalSpeed(ped, spacing);
+                bool death_status = false;
+
+                for(unsigned int a=0;a < allPeds.size();a++)
+                {
+                     Pedestrian* ped = allPeds[a];
+                     if(ped->GetID()==id_nearest_ped)
+                     {
+                          death_status = (ped->IsAlive() == false);
+                          break;
+                     }
+                }
+                //double walking_death = (death_status == true)?optSpeed*(1-GetDeathFactor()):optSpeed;
+                double walking_death = (death_status == true)?optSpeed*(1):optSpeed;
+
+                if(id_nearest_ped==2)
+                     std::cout << " factor " << GetDeathFactor() << " death_status " << death_status << "  walking death  " <<  walking_death << "\n";
+
+                Point speed = direction.Normalized() * walking_death;
                 result_acc.push_back(speed);
 
 
@@ -411,7 +432,7 @@ double VelocityModel::OptimalSpeed(Pedestrian* ped, double spacing) const
       double v0 = ped->GetV0Norm();
       double T = ped->GetT();
       double l = 2*ped->GetEllipse().GetBmax(); //assume peds are circles with const radius
-      double speed = (spacing-l)/T;
+      double speed = (spacing-l)/T + (1-GetDeathFactor())*ped->GetV0Norm();
       speed = (speed>0)?speed:0;
       speed = (speed<v0)?speed:v0;
 //      (1-winkel)*speed;
@@ -493,10 +514,16 @@ Point VelocityModel::ForceRepPed(Pedestrian* ped1, Pedestrian* ped2, int periodi
       double condition1 = ei.ScalarProduct(ep12); // < e_i , e_ij > should be positive
       condition1 = (condition1>0)?condition1:0; // abs
 
-      double factor = 0.05; // influence of dead people
-      double life = (ped1->IsAlive())?1.0:factor;
+
+      if(ped2->GetID() ==  2) ped2->Kill();
+
+      double life = (ped2->IsAlive())?1.0:GetDeathFactor();
+
 
       R_ij = - _aPed * life * exp((l-Distance)/_DPed);
+      if(ped1->GetID() == 1 )
+           std::cout << R_ij  << " factor  " << GetDeathFactor()<< " life " << life << " is alive " << ped2->IsAlive()  << "\n";
+
       F_rep = ep12 * R_ij;
 
      return F_rep;
@@ -612,6 +639,12 @@ double VelocityModel::GetaPed() const
 {
      return _aPed;
 }
+double VelocityModel::GetDeathFactor() const\
+{
+     return _death_factor;
+
+}
+
 
 double VelocityModel::GetDPed() const
 {

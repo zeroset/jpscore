@@ -96,7 +96,7 @@ public:
           _distEffMaxPed = 2;
           _distEffMaxWall = 2;
           // ----------------
-
+          _deathFactor = 1.0;
           _hostname = "localhost";
           _trajectoriesFile = "trajectories.xml";
           _errorLogFile = "log.txt";
@@ -125,7 +125,7 @@ public:
 //          _dirSubLocal = nullptr;
 //          _dirLocal = nullptr;
           _dirStrategy = nullptr;
-	  //for random numbers
+          //for random numbers
           _rdGenerator=RandomNumberGenerator();
 
 
@@ -199,7 +199,8 @@ public:
      double GetaPed() const { return _aPed; };
 
      void SetaPed(double aPed) { _aPed = aPed; };
-
+     void SetDeathFactor(double df) { _deathFactor = df; };
+     double GetDeathFactor() const { return _deathFactor; };
      double GetbPed() const { return _bPed; };
 
      void SetbPed(double bPed) { _bPed = bPed; };
@@ -410,6 +411,7 @@ private:
      bool _use_wall_avoidance;
      //gradientmodel
      double _slow_down_distance;
+     double _deathFactor;
 
      //ff router quickest
      double _recalc_interval;
