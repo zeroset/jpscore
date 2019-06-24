@@ -289,7 +289,7 @@ void VelocityModel::ComputeNextTimeStep(double current, double deltaT, Building*
                 //============================================================
                 //double winkel = spacings[0].second;
                 //Point tmp;
-                double optSpeed = OptimalSpeed(ped, spacing);
+
                 bool death_status = false;
 
                 for(unsigned int a=0;a < allPeds.size();a++)
@@ -301,13 +301,8 @@ void VelocityModel::ComputeNextTimeStep(double current, double deltaT, Building*
                           break;
                      }
                 }
-                //double walking_death = (death_status == true)?optSpeed*(1-GetDeathFactor()):optSpeed;
-                double walking_death = (death_status == true)?optSpeed*(1):optSpeed;
-
-                if(id_nearest_ped==2)
-                     std::cout << " factor " << GetDeathFactor() << " death_status " << death_status << "  walking death  " <<  walking_death << "\n";
-
-                Point speed = direction.Normalized() * walking_death;
+                double optSpeed = OptimalSpeed(ped, spacing, (death_status == true)?1:0);
+                Point speed = direction.Normalized() * optSpeed;
                 result_acc.push_back(speed);
 
 
@@ -427,12 +422,14 @@ Point VelocityModel::e0(Pedestrian* ped, Room* room) const
 }
 
 
-double VelocityModel::OptimalSpeed(Pedestrian* ped, double spacing) const
+double VelocityModel::OptimalSpeed(Pedestrian* ped, double spacing, int isDead) const
 {
       double v0 = ped->GetV0Norm();
       double T = ped->GetT();
       double l = 2*ped->GetEllipse().GetBmax(); //assume peds are circles with const radius
-      double speed = (spacing-l)/T + (1-GetDeathFactor())*ped->GetV0Norm();
+      double speed0 = (spacing-l)/T;
+      speed0 = (speed0>0)?speed0:0;
+      double speed =  speed0 + isDead*(1-GetDeathFactor())*ped->GetV0Norm();
       speed = (speed>0)?speed:0;
       speed = (speed<v0)?speed:v0;
 //      (1-winkel)*speed;
@@ -521,8 +518,6 @@ Point VelocityModel::ForceRepPed(Pedestrian* ped1, Pedestrian* ped2, int periodi
 
 
       R_ij = - _aPed * life * exp((l-Distance)/_DPed);
-      if(ped1->GetID() == 1 )
-           std::cout << R_ij  << " factor  " << GetDeathFactor()<< " life " << life << " is alive " << ped2->IsAlive()  << "\n";
 
       F_rep = ep12 * R_ij;
 
