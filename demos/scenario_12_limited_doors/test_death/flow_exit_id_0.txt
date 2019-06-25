@@ -1,0 +1,6 @@
+#Simulation time: 100.00
+#Flow at exit exit( ID 0 )
+#Time (s)  cummulative number of agents 
+
+3.500000  1
+

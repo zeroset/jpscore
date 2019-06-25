@@ -93,7 +93,7 @@ void DangerLine::expose(Pedestrian* ped, double seed)
         Point p = ped->GetPos();
         double fatality = getFatalProbability(&p);
         double fate = GetRandomNumber();
-        std::cerr << "  " << fate << "   " << fatality << "\n";
+        // std::cerr << "  " << fate << "   " << fatality << "\n";
         if (fate < fatality) {
 
              //we "kill" the pedestrian by making it not moving

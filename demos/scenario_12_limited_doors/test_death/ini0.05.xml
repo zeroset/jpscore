@@ -2,13 +2,13 @@
   <!-- seed used for initialising random generator -->
   <seed>12542</seed>
   <!-- geometry file -->
-  <geometry>correct_geometry2.xml</geometry>
-  <!-- <geometry>geometry.xml</geometry> -->
+  <!-- <geometry>correct_geometry2.xml</geometry> -->
+  <geometry>geo.xml</geometry>
   <max_sim_time>100</max_sim_time>
   <!--  <events_file>events_list.xml</events_file> -->
   <!-- trajectories file and format -->
-  <trajectories format="plain" fps="16">
-    <file location="traj_flow.txt"/>
+  <trajectories format="plain" fps="8">
+    <file location="traj_factor_005.txt"/>
     <!--     <socket hostname="127.0.0.1" port="8989"/> -->
   </trajectories>
   <!-- where to store the logs -->
@@ -21,14 +21,13 @@
       <model_parameters>
         <solver>euler</solver>
         <stepsize>0.05</stepsize>
-        <exit_crossing_strategy>9</exit_crossing_strategy>
+        <exit_crossing_strategy>2</exit_crossing_strategy>
         <delta_h>0.125</delta_h>
         <wall_avoid_distance>0.8</wall_avoid_distance>
         <use_wall_avoidance>true</use_wall_avoidance>
         <linkedcells enabled="true" cell_size="2.2"/>
-        <force_ped a="5" D="0.1" death_factor="0.0"/>
+        <force_ped a="5" D="0.1" death_factor="0.05"/>
         <force_wall a="1" D="0.02"/>
-
       </model_parameters>
       <agent_parameters agent_parameter_id="1">
         <v0 mu="1.34" sigma="0.0"/>
@@ -82,20 +81,17 @@
     </goals>
   </routing>
   <traffic_constraints>
-    <doors>
-      <door caption="NaN" state="open" outflow="0.5" trans_id="0"/>
-      <door caption="NaN" state="open"  outflow="2.0" trans_id="1"/>
-    </doors>
+    <!-- <doors> -->
+    <!--   <door caption="NaN" state="open" outflow="0.5" trans_id="0" max_agents="10"/> -->
+    <!--   <door caption="NaN" state="open" trans_id="1" /> -->
+    <!-- </doors> -->
   </traffic_constraints>
   <agents operational_model_id="3">
     <agents_distribution>
-      <!-- <group agent_parameter_id="1" goal_id="-1" group_id="1" number="100" room_id="0" router_id="1" subroom_id="1" x_min="-5" x_max="5" y_min="-5" y_max="5"/> -->
-      <group agent_parameter_id="1" goal_id="-1" group_id="1" number="100" room_id="0" router_id="1" subroom_id="1"/>
+      <group agent_parameter_id="1" goal_id="-1" group_id="1" number="1" room_id="0" router_id="1" subroom_id="1" startX="2.5" startY="5.1"/>
+      <group agent_parameter_id="2" goal_id="-1" group_id="1" number="1" room_id="0" router_id="1" subroom_id="1"  startX="4" startY="5"/>
     </agents_distribution>
     <agents_sources>
-      <sourc_e id="1" caption="new-source" time_min="1" time_max="100" frequency="2" N_create="2" agents_max="20"
-              group_id="1"   greedy="true"/>
-
     </agents_sources>
   </agents>
 </JuPedSim>

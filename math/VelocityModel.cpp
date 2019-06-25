@@ -309,7 +309,7 @@ void VelocityModel::ComputeNextTimeStep(double current, double deltaT, Building*
                 spacings.clear(); //clear for ped p
 
                 // stuck peds get removed. Warning is thrown. low speed due to jam is omitted.
-                if(ped->GetTimeInJam() > ped->GetPatienceTime() && ped->GetGlobalTime() > 10000 + ped->GetPremovementTime() &&
+                if(ped->GetTimeInJam() > ped->GetPatienceTime() && ped->GetGlobalTime() > 100000 + ped->GetPremovementTime() &&
                           std::max(ped->GetMeanVelOverRecTime(), ped->GetV().Norm()) < 0.01 &&
                           size == 0 ) // size length of peds neighbour vector
                 {
@@ -512,10 +512,8 @@ Point VelocityModel::ForceRepPed(Pedestrian* ped1, Pedestrian* ped2, int periodi
       condition1 = (condition1>0)?condition1:0; // abs
 
 
-      if(ped2->GetID() ==  2) ped2->Kill();
-
+      // if(ped2->GetID() ==  2) ped2->Kill();
       double life = (ped2->IsAlive())?1.0:GetDeathFactor();
-
 
       R_ij = - _aPed * life * exp((l-Distance)/_DPed);
 

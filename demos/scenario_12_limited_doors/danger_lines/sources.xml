@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<JPScore project="JPS-Project" version="0.8">
+  <agents_sources>
+    <source id="1" caption="new-source" time_min="25" time_max="100" frequency="2" N_create="5" agents_max="20"
+            group_id="1"   greedy="true" x_min="2" x_max="3" y_min="1" y_max="2"/>
+
+
+        <source id="2" caption="new-source" time_min="25" time_max="100" frequency="2" N_create="5" agents_max="40"
+            group_id="1"   greedy="true" x_min="6" x_max="7" y_min="1" y_max="2"/>
+
+  </agents_sources>
+</JPScore>

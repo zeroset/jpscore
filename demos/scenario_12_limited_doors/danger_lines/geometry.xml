@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<geometry version="0.8" caption="second life" unit="m"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:noNamespaceSchemaLocation="http://134.94.2.137/jps_geoemtry.xsd">
+
+<rooms>
+        <room id ="0" caption ="floor">
+                <subroom id ="1" caption="dummy_caption" class="Not specified" A_x="0" B_y="0" C_z="0">
+                        <polygon caption="wall" type="wall">
+                                <vertex px="2" py="5"/>
+                                <vertex px="2" py="1"/>
+                        </polygon>
+                        <polygon caption="wall" type="wall">
+                                <vertex px="2" py="1"/>
+                                <vertex px="7" py="1"/>
+                        </polygon>
+                        <polygon caption="wall" type="wall">
+                                <vertex px="7" py="5"/>
+                                <vertex px="7" py="1"/>
+                        </polygon>
+                        <polygon caption="wall" type="internal">
+                                <vertex px="4" py="5"/>
+                                <vertex px="5" py="5"/>
+                        </polygon>
+                        <polygon caption="wall" type="internal">
+                                <vertex px="7" py="5"/>
+                                <vertex px="6" py="5"/>
+                        </polygon>
+                        <polygon caption="wall" type="internal">
+                                <vertex px="2" py="5"/>
+                                <vertex px="3" py="5"/>
+                        </polygon>
+                </subroom>
+                <crossings>
+                </crossings>
+        </room>
+</rooms>
+<transitions>
+        <transition id ="0" caption="exit" type="emergency" room1_id="0" subroom1_id="1" room2_id="-1" subroom2_id="-1">
+                <vertex px="3" py="5"/>
+                <vertex px="4" py="5"/>
+        </transition>
+        <transition id ="1" caption="exit" type="emergency" room1_id="0" subroom1_id="1" room2_id="-1" subroom2_id="-1">
+                <vertex px="5" py="5"/>
+                <vertex px="6" py="5"/>
+        </transition>
+</transitions>
+    <danger_lines>
+      <danger_line id="1" x_speed="0.1" y_speed="0" fatal_distance="1" danger_distance="3" alpha="3">
+        <vertex px="-1" py="5"/>
+        <vertex px="-1" py="4"/>
+      </danger_line>
+    </danger_lines>
+
+</geometry>
