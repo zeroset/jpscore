@@ -1013,14 +1013,20 @@ bool NormalSubRoom::ConvertLineToPoly(const vector<Line*>& goals)
          int j = 0;
          for (unsigned int i = itr; i < copy.size(); ++i) {
                  if (it.IntersectionWith(*copy[i], pIntsct) == true) {
+
                          if (it.ShareCommonPointWith(*copy[i]) == false) {
                                  char tmp[CLENGTH];
                                  sprintf(tmp, "ERROR: \tNormanSubRoom::ConvertLineToPoly(): SubRoom %d Room %d !!\n", GetSubRoomID(), GetRoomID());
                                  Log->Write(tmp);
-                                 sprintf(tmp, "ERROR: \tWalls %s & %s intersect: !!!\n", it.toString().c_str(),
-                                                 copy[i]->toString().c_str());
+                                 sprintf(tmp, "ERROR: \tWall %s & Wall/Transition %s intersect: !!!\n", it.toString().c_str(),
+                                         copy[i]->toString().c_str());
+                                 std::cout << "NN " <<    pIntsct.toString() << "\n";
+
+
                                  Log->Write(tmp);
-                                 return false;
+                                 // return false;
+                                 continue;
+
                          }
                          else
                                ++j; //number of lines, that share endpoints with wall "it"
