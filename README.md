@@ -1,3 +1,12 @@
+This branch contains the implementation of the model used in the talk 
+```
+On the AmritSar massacre. History meets pedestrian dynamics: numerical investigation of the Jallianwala Bagh’s events (1919) 
+```
+
+presented in the TGF'19 in Pamplona, Spain.
+
+Simulation files can be found [here](https://fz-juelich.sciebo.de/s/F5dVV0hm6nB5M6e)
+
 # JPScore
 
 [![Build Status](https://gitlab.version.fz-juelich.de/jupedsim/jpscore/badges/develop/build.svg)](https://gitlab.version.fz-juelich.de/JuPedSim/jpscore/pipelines)
