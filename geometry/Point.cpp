@@ -153,7 +153,6 @@ where the coord. of a point are transformated to cart. coord.
 ----> [x ; y] =  M(-phi) * [x_2 ; y_2] +  [xc ; yc]
 
 */
-
 Point Point::TransformToCartesianCoordinates(const Point &center, double cphi, double sphi) const
 {
      Point p = Point(_x, _y);
@@ -172,38 +171,33 @@ Point Point::Rotate(double ctheta, double stheta) const
 }
 
 //  sum
-const Point Point::operator+(const Point& p) const
+Point Point::operator+(const Point& p) const
 {
-     //return Point(_x + p.GetX(), _y + p.GetY());
      return Point(_x + p._x, _y + p._y);
 }
 
 // sub
-const Point Point::operator-(const Point& p) const
+Point Point::operator-(const Point& p) const
 {
-     // return Point(_x - p.GetX(), _y - p.GetY());
      return Point(_x - p._x, _y - p._y);
 }
 
 // equal
 bool Point::operator==(const Point& p) const
 {
-//    return (fabs(_x - p.GetX()) < J_EPS && fabs(_y - p.GetY()) < J_EPS);
      return (fabs(_x - p._x) < J_EPS && fabs(_y - p._y) < J_EPS);
 }
 
 // not equal
 bool Point::operator!=(const Point& p) const
 {
-     //return (fabs(_x - p.GetX()) > J_EPS || fabs(_y - p.GetY()) > J_EPS);
      return (fabs(_x - p._x) > J_EPS || fabs(_y - p._y) > J_EPS);
 }
 
 
 // multiplication with scalar
-const Point operator*(const Point& p, double f)
+Point operator*(const Point& p, double f)
 {
-     //return Point(p.GetX() * f, p.GetY() * f);
      return Point(p._x * f, p._y * f);
 }
 
@@ -217,8 +211,8 @@ Point& Point::operator+=(const Point& p)
 }
 
 
-// divition with scalar
-const Point operator/(const Point& p, double f)
+// division by scalar
+Point operator/(const Point& p, double f)
 {
      if (f>J_EPS*J_EPS)
           return Point(p._x / f, p._y / f);
@@ -226,7 +220,6 @@ const Point operator/(const Point& p, double f)
           std::cout << "Warning: Point::/operator. dividand "<<f<< " is to small. Set it to 1 instead"<<std::endl;
           return Point(p._x, p._y);
      }
-     //return Point(p.GetX() / f, p.GetY() / f);
 }
 
 std::ostream& Point::SaveToXml(std::ostream& ostream) const
@@ -234,83 +227,3 @@ std::ostream& Point::SaveToXml(std::ostream& ostream) const
      ostream << "<vertex px=" << _x << " py=" << _y << " />" << std::endl;
      return ostream;;
 }
-
-bool Point::operator<(const Point& rhs) const
-{
-     if( *this != *this || rhs != rhs )
-          return false;
-     if(_x < rhs._x)
-          return true;
-     else if(  ( _x == rhs._x )
-               && ( _y < rhs._y )  )
-          return true;
-     return false;
-
-//     if (_x<rhs._x)
-//          return true;
-//     else if (rhs._x<_x)
-//          return false;
-//     return _y<rhs._y;
-}
-
-bool Point::operator>(const Point& rhs) const
-{
-     return rhs<*this;
-}
-
-bool Point::operator<=(const Point& rhs) const
-{
-     return !(rhs<*this);
-}
-
-bool Point::operator>=(const Point& rhs) const
-{
-     return !(*this<rhs);
-}
-
-double Distance(const Point& point1, const Point& point2)
-{
-     return boost::geometry::distance(point1, point2);
-}
-
-//bool operator == (const Point& point1, const Point& point2)
-//{ return (  ( point1.x() == point2.x() )
-//               && ( point1.y() == point2.y() )  ); }
-//bool operator != (const Point& point1, const Point& point2)
-//{ return !( point1 == point2 ); }
-//
-//
-//bool operator < (const Point& point1, const Point& point2)
-//{
-//     if( point1 != point1 || point2 != point2 )
-//          return false;
-//     if(point1.x() < point2.x())
-//          return true;
-//     else if(  ( point1.x() == point2.x() )
-//               && ( point1.y() < point2.y() )  )
-//          return true;
-//     return false;
-//}
-//bool operator > (const Point& point1, const Point& point2)
-//{
-//     if( point1 != point1 || point2 != point2 )
-//          return false;
-//     if( point1.x() > point2.x() )
-//          return true;
-//     else if(  ( point1.x() == point2.x() )
-//               && ( point1.y() > point2.y() )  )
-//          return true;
-//     return false;
-//}
-//bool operator >= (const Point& point1, const Point& point2)
-//{
-//     if( point1 != point1 || point2 != point2 )
-//          return false;
-//     return !( point1 < point2 );
-//}
-//bool operator <= (const Point& point1, const Point& point2)
-//{
-//     if( point1 != point1 || point2 != point2 )
-//          return false;
-//     return !( point1 > point2 );
-//}

@@ -568,17 +568,6 @@ Point DirectionSubLocalFloorfieldTrips::GetTarget(Room* /*room*/, Pedestrian* pe
      if ((goal!=nullptr) && (goal->IsInsideGoal(ped->GetPos()))){
 
           std::vector<Point> polygon(goal->GetPolygon());
-          std::set<Point> triangle;
-
-          int min=0, max;
-
-          // Get randomly 3 points of polygon (
-          while (triangle.size() < 3){
-               max = polygon.size()-1;
-               int index = min + (std::rand() % static_cast<int>(max - min + 1));
-
-               triangle.insert(polygon.at(index));
-          }
 
           double r1, r2;
           r1 = ((double) std::rand() / (RAND_MAX));
@@ -702,17 +691,6 @@ Point DirectionSubLocalFloorfieldTripsVoronoi::GetTarget(Room* /*room*/, Pedestr
      if ((goal!=nullptr) && (goal->IsInsideGoal(ped->GetPos()))){
 
           std::vector<Point> polygon(goal->GetPolygon());
-          std::set<Point> triangle;
-
-          int min=0, max;
-
-          // Get randomly 3 points of polygon (
-          while (triangle.size() < 3){
-               max = polygon.size()-1;
-               int index = min + (std::rand() % static_cast<int>(max - min + 1));
-
-               triangle.insert(polygon.at(index));
-          }
 
           double r1, r2;
           r1 = ((double) std::rand() / (RAND_MAX));
