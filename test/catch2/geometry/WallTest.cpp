@@ -20,6 +20,8 @@
 
 #include <catch2/catch.hpp>
 
+using Catch::Matchers::Equals;
+
 
 TEST_CASE("geometry/Wall", "[geometry][Wall]")
 {
@@ -40,5 +42,22 @@ TEST_CASE("geometry/Wall", "[geometry][Wall]")
             // GetType test
             REQUIRE(W2.GetType() == type[i % 2]);
         }
+    }
+
+    SECTION("Write")
+    {
+        REQUIRE_THAT(Wall().Write(),
+                     Equals("\t\t<wall>\n\t\t\t<point xPos=\"0.00\" yPos=\"0.00\"/>\n\t\t\t<point "
+                            "xPos=\"0.00\" yPos=\"0.00\"/>\n\t\t</wall>\n"));
+        REQUIRE_THAT(Wall(Point(0, 0), Point(0.0001, 1)).Write(),
+                     Equals("\t\t<wall>\n\t\t\t<point xPos=\"0.00\" yPos=\"0.00\"/>\n\t\t\t<point "
+                            "xPos=\"0.00\" yPos=\"1.00\"/>\n\t\t</wall>\n"));
+        REQUIRE_THAT(Wall(Point(0, 0), Point(0.1, 1)).Write(),
+                     Equals("\t\t<wall>\n\t\t\t<point xPos=\"0.00\" yPos=\"0.00\"/>\n\t\t\t<point "
+                            "xPos=\"0.10\" yPos=\"1.00\"/>\n\t\t</wall>\n"));
+        REQUIRE_THAT(Wall(Point(0, 0), Point(0.115, 0)).Write(),
+                     Equals("\t\t<wall>\n\t\t\t<point xPos=\"0.00\" yPos=\"0.00\"/>\n\t\t\t<point "
+                            "xPos=\"0.12\" yPos=\"0.00\"/>\n\t\t</wall>\n"));
+
     }
 }

@@ -630,6 +630,7 @@ if (BUILD_CPPUNIT_TEST)
       test/catch2/math/MathematicsTest.cpp
 
       test/catch2/geometry/LineTest.cpp
+      test/catch2/geometry/WallTest.cpp
       test/catch2/geometry/SubRoomTest.cpp
       test/catch2/geometry/RoomTest.cpp
       test/catch2/geometry/PointTest.cpp

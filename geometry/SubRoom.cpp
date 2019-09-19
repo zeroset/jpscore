@@ -34,6 +34,10 @@
 #include "WaitingArea.h"
 #include "Wall.h"
 
+#include "general/Logger.h"
+
+#include <fmt/format.h>
+
 #ifdef _SIMULATOR
 #include "pedestrian/Pedestrian.h"
 #endif //_SIMULATOR
@@ -604,9 +608,10 @@ bool SubRoom::Overlapp(const std::vector<Line*>& goals) const
                if (wall.Overlapp(*goal))
 
                     {
-                         wall.WriteToErrorLog();
-                         std::cout << "Goal " << goal->GetPoint1()._x << ", " << goal->GetPoint1()._y << "| "
-                                   << goal->GetPoint2()._x<< ", " << goal->GetPoint2()._y << std::endl;
+                        Logging::Error("Wall and goal overlapping.");
+                        wall.WriteToErrorLog();
+                        Logging::Error(fmt::format("Goal {} -- {}", goal->GetPoint1().toString(), goal->GetPoint2().toString()));
+
                          return true;
                     }
           }

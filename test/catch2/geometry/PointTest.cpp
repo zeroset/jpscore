@@ -55,7 +55,7 @@ TEST_CASE("geometry/Point", "[geometry][Point]")
 
     SECTION("toString")
     {
-        REQUIRE(Point(0, 1.116).toString() == "( 0.00 : 1.12 )");
+        REQUIRE(Point(0, 0.115).toString() == "( 0.00 : 0.12 )");
         REQUIRE(Point(0, 1.111).toString() == "( 0.00 : 1.11 )");
         REQUIRE(Point(10000, 1).toString() == "( 10000.00 : 1.00 )");
         REQUIRE(Point(-2, -0.5).toString() == "( -2.00 : -0.50 )");
