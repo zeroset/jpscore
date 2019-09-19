@@ -41,39 +41,19 @@ TEST_CASE("geometry/Point", "[geometry][Point]")
         REQUIRE(p3._y == 1);
     }
 
-    SECTION("Setter")
-    {
-        Point p2(1, 1);
-        p2._x = (0.5);
-        p2._y = (-232.2);
-        REQUIRE(p2._x == 0.5);
-        REQUIRE(p2._y == -232.2);
-    }
-
     SECTION("Norm")
     {
-        Point p1(0, 0);
-        REQUIRE(p1.Norm() == Approx(0));
-        p1._x = (1);
-        REQUIRE(p1.Norm() == Approx(1));
-        p1._x = (-1);
-        REQUIRE(p1.Norm() == Approx(1));
-        p1._x = (3);
-        REQUIRE(p1.Norm() == Approx(3));
-        p1._x = (0);
-        p1._y = (1);
-        REQUIRE(p1.Norm() == Approx(1));
-        p1._y = (-1);
-        REQUIRE(p1.Norm() == Approx(1));
-        p1._y = (3);
-        REQUIRE(p1.Norm() == Approx(3));
-
-        p1._x = (3);
-        p1._y = (4);
-        REQUIRE(p1.Norm() == Approx(5));
+        REQUIRE(Point(0, 0).Norm() == Approx(0));
+        REQUIRE(Point(1, 0).Norm() == Approx(1));
+        REQUIRE(Point(-1, 0).Norm() == Approx(1));
+        REQUIRE(Point(-3, 0).Norm() == Approx(3));
+        REQUIRE(Point(0, 1).Norm() == Approx(1));
+        REQUIRE(Point(0, -1).Norm() == Approx(1));
+        REQUIRE(Point(0, 3).Norm() == Approx(3));
+        REQUIRE(Point(3, 4).Norm() == Approx(5));
     }
 
-    SECTION("to String")
+    SECTION("toString")
     {
         REQUIRE(Point(0, 1.116).toString() == "( 0.00 : 1.12 )");
         REQUIRE(Point(0, 1.111).toString() == "( 0.00 : 1.11 )");
@@ -81,21 +61,18 @@ TEST_CASE("geometry/Point", "[geometry][Point]")
         REQUIRE(Point(-2, -0.5).toString() == "( -2.00 : -0.50 )");
     }
 
-    SECTION("Norm Square")
+    SECTION("NormSquare")
     {
-        Point p;
         for(double i = -5, j = 0.6; i < 5; ++i, ++j) {
-            p._x = (i);
-            p._y = (j);
+            Point p{i, j};
             REQUIRE(p.NormSquare() == Approx(std::pow(i, 2) + std::pow(j, 2)));
         }
     }
 
-    SECTION("Point Normalize")
+    SECTION("Normalized")
     {
         Point p1(0.0001, 0.0001);
-        Point p2(10, 10);
-        p2 = p1.Normalized();
+        Point p2 = p1.Normalized();
         REQUIRE(p2._x == Approx(0.0));
         REQUIRE(p2._y == Approx(0.0));
 
@@ -119,7 +96,7 @@ TEST_CASE("geometry/Point", "[geometry][Point]")
         }
     }
 
-    SECTION("Scalar Product")
+    SECTION("ScalarProduct")
     {
         Point p1(10, 5);
         Point p2;
@@ -130,7 +107,7 @@ TEST_CASE("geometry/Point", "[geometry][Point]")
         }
     }
 
-    SECTION("Operator overloading")
+    SECTION("Operators")
     {
         for(int i = 1; i < 10; ++i) {
             Point p1(i, -i * 10);
@@ -163,7 +140,7 @@ TEST_CASE("geometry/Point", "[geometry][Point]")
         }
     }
 
-    SECTION("Coord Transform to Ellipse")
+    SECTION("TransformToEllipseCoordinates")
     {
         for(int i = 1; i < 5; ++i) {
             Point p1(i * 10, i / 10);
@@ -175,7 +152,7 @@ TEST_CASE("geometry/Point", "[geometry][Point]")
         }
     }
 
-    SECTION("Coord Transforma to Cartesian")
+    SECTION("TransformToCartesianCoordinates")
     {
         for(int i = 1; i < 5; ++i) {
             Point p1(i * 10, i / 10);
