@@ -75,27 +75,10 @@ TEST_CASE("geometry/Point", "[geometry][Point]")
 
     SECTION("to String")
     {
-        std::string xpt[] = {"0.25", "1.25", "2.25", "3.25"};
-        std::string ypt[] = {"10.25", "11.25", "12.25", "13.25"};
-        Point       p1;
-        for(double i = 0.25; i < 4; ++i) {
-            p1._x = (i);
-            p1._y = (i + 10);
-            REQUIRE(p1.toString() == "( " + xpt[int(i)] + " : " + ypt[int(i)] + " )");
-        }
-
-        Point p2(-2, -0.5);
-        REQUIRE(p2.toString() == "( -2 : -0.5 )");
-    }
-
-    SECTION("Norm Molified")
-    {
-        Point p;
-        for(double i = 0, j = 0.5; i < 10; ++i, ++j) {
-            p._x = (i);
-            p._y = (j);
-            REQUIRE(p.NormMolified() == Approx(std::sqrt(std::pow(i, 2) + std::pow(j, 2) + 0.1)));
-        }
+        REQUIRE(Point(0, 1.116).toString() == "( 0.00 : 1.12 )");
+        REQUIRE(Point(0, 1.111).toString() == "( 0.00 : 1.11 )");
+        REQUIRE(Point(10000, 1).toString() == "( 10000.00 : 1.00 )");
+        REQUIRE(Point(-2, -0.5).toString() == "( -2.00 : -0.50 )");
     }
 
     SECTION("Norm Square")
@@ -122,10 +105,6 @@ TEST_CASE("geometry/Point", "[geometry][Point]")
             p2    = p1.Normalized();
             REQUIRE(p2._x == Approx(i / p1.Norm()));
             REQUIRE(p2._y == Approx(j / p1.Norm()));
-
-            p2 = p1.NormalizedMolified();
-            REQUIRE(p2._x == Approx(i / p1.NormMolified()));
-            REQUIRE(p2._y == Approx(j / p1.NormMolified()));
         }
     }
 

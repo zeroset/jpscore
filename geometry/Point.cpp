@@ -20,54 +20,34 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with JuPedSim. If not, see <http://www.gnu.org/licenses/>.
  *
- * \section Description
  *
  *
  **/
 #include "Point.h"
 
+#include "general/Logger.h"
 #include "general/Macros.h"
 
-#include <sstream>
+#include <fmt/format.h>
 
-/************************************************************
-  Konstruktoren
- ************************************************************/
 std::string Point::toString() const
 {
-     std::stringstream tmp;
-     tmp<<"( "<<_x<<" : " <<_y<<" )";
-     return tmp.str();
+    return fmt::format("( {:.2f} : {:.2f} )", _x, _y);
 }
 
 double Point::Norm() const
 {
-     return sqrt(NormSquare());
+    return sqrt(NormSquare());
 }
-
-double Point::NormMolified() const
-{
-     double const eps_sq = 0.1;
-     return sqrt(NormSquare() + eps_sq);
-}
-
-Point Point::NormalizedMolified() const
-{
-     double norm = NormMolified();
-     if (norm > J_EPS_GOAL)
-          return ( Point(_x, _y) / norm );
-     else return Point(0.0, 0.0);
-}
-
 
 Point Point::Normalized() const
 {
-     double norm = Norm();
-     if (norm > J_EPS)
-          return ( Point(_x, _y) / norm );
-     else return Point(0.0, 0.0);
+    double norm = Norm();
+    if(norm > J_EPS) {
+        return (Point(_x, _y) / norm);
+    }
+    return Point(0.0, 0.0);
 }
-
 
 
 /* Transformiert die "normalen" Koordinaten in Koordinaten der Ellipse
@@ -111,7 +91,8 @@ S_1 is cartesian coordinate system!!
 
 OA = OO1 + O1A
 
- [x ; y] = [xc ; yc] +  [x_3 ; y_3]   : (1) ( with [x_i ; y_i] coordinats of P in S_i and i in {1,2,3} )
+ [x ; y] = [xc ; yc] +  [x_3 ; y_3]   : (1) ( with [x_i ; y_i] coordinats of P in S_i and i in
+{1,2,3} )
 
 [x_2 ; y_2] = M(phi) * [x_3 ; y_3]  : (2)
 
@@ -129,10 +110,10 @@ OC  = -O1O +O1C
 xnew = -xc + x
 
 */
-Point Point::TransformToEllipseCoordinates(const Point &center, double cphi, double sphi) const
+Point Point::TransformToEllipseCoordinates(const Point & center, double cphi, double sphi) const
 {
-     Point p = Point(_x, _y);
-     return (p - center).Rotate(cphi, -sphi);
+    Point p(_x, _y);
+    return (p - center).Rotate(cphi, -sphi);
 }
 
 /*
@@ -153,10 +134,10 @@ where the coord. of a point are transformated to cart. coord.
 ----> [x ; y] =  M(-phi) * [x_2 ; y_2] +  [xc ; yc]
 
 */
-Point Point::TransformToCartesianCoordinates(const Point &center, double cphi, double sphi) const
+Point Point::TransformToCartesianCoordinates(const Point & center, double cphi, double sphi) const
 {
-     Point p = Point(_x, _y);
-     return (p.Rotate(cphi, sphi) + center);
+    Point p(_x, _y);
+    return (p.Rotate(cphi, sphi) + center);
 }
 
 /*rotate a two-dimensional vector by an angle of theta
@@ -167,63 +148,58 @@ Rotation-matrix=[cos(theta)  -sin(theta)]
 */
 Point Point::Rotate(double ctheta, double stheta) const
 {
-     return Point(_x * ctheta - _y*stheta, _x * stheta + _y * ctheta);
+    return Point(_x * ctheta - _y * stheta, _x * stheta + _y * ctheta);
 }
 
 //  sum
-Point Point::operator+(const Point& p) const
+Point Point::operator+(const Point & p) const
 {
-     return Point(_x + p._x, _y + p._y);
+    return Point(_x + p._x, _y + p._y);
 }
 
 // sub
-Point Point::operator-(const Point& p) const
+Point Point::operator-(const Point & p) const
 {
-     return Point(_x - p._x, _y - p._y);
+    return Point(_x - p._x, _y - p._y);
 }
 
 // equal
-bool Point::operator==(const Point& p) const
+bool Point::operator==(const Point & p) const
 {
-     return (fabs(_x - p._x) < J_EPS && fabs(_y - p._y) < J_EPS);
+    return (fabs(_x - p._x) < J_EPS && fabs(_y - p._y) < J_EPS);
 }
 
 // not equal
-bool Point::operator!=(const Point& p) const
+bool Point::operator!=(const Point & p) const
 {
-     return (fabs(_x - p._x) > J_EPS || fabs(_y - p._y) > J_EPS);
+    return (fabs(_x - p._x) > J_EPS || fabs(_y - p._y) > J_EPS);
 }
 
 
 // multiplication with scalar
-Point operator*(const Point& p, double f)
+Point operator*(const Point & p, double f)
 {
-     return Point(p._x * f, p._y * f);
+    return Point(p._x * f, p._y * f);
 }
 
 
 // Assignment
-Point& Point::operator+=(const Point& p)
+Point & Point::operator+=(const Point & p)
 {
-     _x += p._x;
-     _y += p._y;
-     return *this;
+    _x += p._x;
+    _y += p._y;
+    return *this;
 }
 
 
 // division by scalar
-Point operator/(const Point& p, double f)
+Point operator/(const Point & p, double f)
 {
-     if (f>J_EPS*J_EPS)
-          return Point(p._x / f, p._y / f);
-     else {
-          std::cout << "Warning: Point::/operator. dividand "<<f<< " is to small. Set it to 1 instead"<<std::endl;
-          return Point(p._x, p._y);
-     }
-}
+    if(f > J_EPS * J_EPS) {
+        return Point(p._x / f, p._y / f);
+    }
 
-std::ostream& Point::SaveToXml(std::ostream& ostream) const
-{
-     ostream << "<vertex px=" << _x << " py=" << _y << " />" << std::endl;
-     return ostream;;
+    Logging::Warning(fmt::format(
+        "Point::operator/: dividand {} is to small. It must be at least {}", f, J_EPS * J_EPS));
+    return Point(p._x, p._y);
 }

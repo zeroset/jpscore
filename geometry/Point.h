@@ -54,9 +54,6 @@ public:
      /// Norm
      double Norm() const;
 
-     /// Norm molified see Koester2013
-     double NormMolified() const;
-
      /// Norm square
      inline double NormSquare() const
      {
@@ -64,9 +61,8 @@ public:
      }
      /// normalized vector
      Point Normalized() const;
-     /// normalized vector usinf NormMolified
-     Point NormalizedMolified() const;
-     /// dot product
+
+    /// dot product
      inline double ScalarProduct(const Point &v) const
      {
           return _x * v._x + _y * v._y;
@@ -111,11 +107,6 @@ public:
      Point& operator+=(const Point& p);
      /// nice formating of the point
      std::string toString() const;
-    /**
-     * @param [in/out] ostream& : ostream to write the point as xml-format into
-     * @return the given ostream with point as xml-format written into
-     */
-     std::ostream& SaveToXml(std::ostream&) const;
 };
 
 // Register Point for usage with boost::geometry
@@ -123,6 +114,6 @@ BOOST_GEOMETRY_REGISTER_POINT_2D(Point, double, cs::cartesian, _x, _y);
 
 
 /// multiplication
-const Point operator*(const Point& p, const double f);
+Point operator*(const Point& p, const double f);
 /// division
-const Point operator/(const Point& p, const double f);
+Point operator/(const Point& p, const double f);

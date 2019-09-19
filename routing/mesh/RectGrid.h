@@ -28,6 +28,7 @@
 #pragma once
 
 #include "geometry/Point.h"
+#include <iostream>
 
 // geometric interpretation of index in "directNeighbor"
 //          x (1)              ^ y
