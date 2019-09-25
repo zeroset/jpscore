@@ -26,14 +26,13 @@
  **/
 #pragma once
 
-#include "Point.h"
-
 #include "IO/OutputHandler.h"
+#include "Point.h"
 
 #include <string>
 #include <vector>
 
-//forward declarations
+// forward declarations
 class OutputHandler;
 class Wall;
 
@@ -54,9 +53,7 @@ public:
 
      Line();
 
-     Line(const Point& p1, const Point& p2, int count); // count = 0 --> don't count the line. Useful for temporary lines.
-
-     Line(const Point& p1, const Point& p2);
+     Line(const Point& p1, const Point& p2, bool new_uid = true); // new_uid = false --> no new uid for this line
 
      virtual ~Line() = default;
 
@@ -232,11 +229,6 @@ public:
      bool ShareCommonPointWith(const Line& line, Point& P) const;
 
      /**
-      * @return true if the given point is one end point of the segment
-      */
-     bool HasEndPoint(const Point& point) const;
-
-     /**
       * @return a nice formated string describing the line
       */
      virtual std::string Write() const;
@@ -263,6 +255,11 @@ public:
      Line Enlarge(double d) const;
 
 private:
+     /**
+      * @return true if the given point is one end point of the segment
+      */
+     bool HasEndPoint(const Point& point) const;
+
 
      //checks whether [a, b] intersects [x y]
      //derrived from [A,B ) [X, Y) test

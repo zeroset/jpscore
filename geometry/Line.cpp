@@ -27,9 +27,8 @@
 #include "Line.h"
 
 #include "Wall.h"
-
-#include "math/Mathematics.h"
 #include "general/Macros.h"
+#include "math/Mathematics.h"
 
 #include <vector>
 
@@ -50,16 +49,12 @@ Line::Line()
      _uid = _static_UID++;
 }
 
-Line::Line(const Point& p1, const Point& p2, int count):
+Line::Line(const Point& p1, const Point& p2, bool new_uid):
       _point1(p1), _point2(p2), _centre((p1+p2)*0.5), _length((p1-p2).Norm())
 {
-     if(count) _uid = _static_UID++;
-}
-
-Line::Line(const Point& p1, const Point& p2):
-            _point1(p1), _point2(p2), _centre((p1+p2)*0.5), _length((p1-p2).Norm())
-{
-     _uid = _static_UID++;
+    if(new_uid) {
+        _uid = _static_UID++;
+    }
 }
 
 int Line::GetUniqueID() const

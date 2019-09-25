@@ -1344,13 +1344,13 @@ void UnivFFviaFMTrips::addTarget(const int uid, double* costarrayDBL, Point* gra
                const Point &p2 = tempTargetLine.GetPoint2();
                double length = tempTargetLine.GetLength();
                double u = 0.2 / length;
-               tempTargetLine = Line(p1 + (p2 - p1) * u, p1 + (p2 - p1) * (1 - u), 0);
+               tempTargetLine = Line(p1 + (p2 - p1) * u, p1 + (p2 - p1) * (1 - u), false);
           } else if (tempTargetLine.GetLength() > 0.2) {
                const Point &p1 = tempTargetLine.GetPoint1();
                const Point &p2 = tempTargetLine.GetPoint2();
                double length = tempTargetLine.GetLength();
                double u = 0.05 / length;
-               tempTargetLine = Line(p1 + (p2 - p1) * u, p1 + (p2 - p1) * (1 - u), 0);
+               tempTargetLine = Line(p1 + (p2 - p1) * u, p1 + (p2 - p1) * (1 - u), false);
           }
      }
 

@@ -1751,7 +1751,7 @@ void CentrePointFFViaFMTrips::getDirectionToUID(int destID, const long int key, 
 //                clearAndPrepareForFloorfieldReCalc(localcostptr);
             //std::vector<Line> localline = {Line((Line) *(building->GetTransOrCrossByUID(destID)))};
             Point centre = _building->GetTransOrCrossByUID(destID)->GetCentre();
-            std::vector<Line> localline = {Line(centre, centre, 0)}; // only one point
+            std::vector<Line> localline = {Line(centre, centre, false)}; // only one point
 //                setNewGoalAfterTheClear(localcostptr, localline);
             //Log->Write("Starting FF for UID %d (ID %d)", destID, dynamic_cast<Crossing*>(building->GetTransOrCrossByUID(destID))->GetID());
             //std::cerr << "\rW\tO\tR\tK\tI\tN\tG";
@@ -1764,7 +1764,7 @@ void CentrePointFFViaFMTrips::getDirectionToUID(int destID, const long int key, 
              //this way, the ffrouter understands, if a pedestrian reached the line, but is next to central point.
              Point a = _building->GetTransOrCrossByUID(destID)->GetPoint1();
              Point b = _building->GetTransOrCrossByUID(destID)->GetPoint2();
-             localline.emplace_back(Line(a, b, 0));
+             localline.emplace_back(Line(a, b, false));
              drawLinesOnGrid<double>(localline, localcostptr, 0.);
 #pragma omp critical(floorfieldsBeingCalculated)
             {

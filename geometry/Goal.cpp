@@ -238,7 +238,7 @@ bool Goal::ConvertLineToPoly()
           _crossing->SetPoint2(point2);
      }else{
           _crossing->SetPoint1(_poly[0]);
-          Line tmp_line(_poly[_poly.size()/2], _poly[(_poly.size()/2)+1], 0);
+          Line tmp_line(_poly[_poly.size()/2], _poly[(_poly.size()/2)+1], false);
           _crossing->SetPoint2(tmp_line.GetCentre());
      }
 
