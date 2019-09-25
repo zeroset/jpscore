@@ -275,12 +275,6 @@ bool Line::operator!=(const Line& l) const
      return (!(*this==l));
 
 }
-// this function is necessary to use std::set and is basically the same as !=
-bool Line::operator<(const Line& l) const
-{
-     return (!(*this==l));
-}
-
 
 double Line::GetLength() const
 {
@@ -438,23 +432,6 @@ Line Line::Enlarge(double d) const
      return Line(_point1+diff, _point2-diff);
 }
 
-bool Line::IsHorizontal()
-{
-     return fabs(_point1._y-_point2._y)<=J_EPS;
-}
-
-bool Line::IsVertical()
-{
-     return fabs(_point1._x-_point2._x)<=J_EPS;
-}
-
-int Line::WichSide(const Point& pt)
-{
-
-     if (IsLeft(pt)) return 0;
-     return 1;
-}
-
 bool Line::ShareCommonPointWith(const Line& line, Point& P) const
 {
 
@@ -541,35 +518,6 @@ bool Line::IntersectionWithCircle(const Point& centre, double radius /*cm for pe
      double t2 = (-b-sqrt(delta))/(2*a);
      if ((t1<0.0) || (t1>1.0)) return false;
      return !((t2<0.0) || (t2>1.0));
-}
-
-//TODO: Consider numerical stability and special case pt is on line
-// Returns true if pt is on the left side ( from point1 toward point2)
-bool Line::IsLeft(const Point& pt)
-{
-     double test =
-               (_point2._x-_point1._x)*(pt._y-_point1._y)-(_point2._y-_point1._y)*(pt._x-_point1._x);
-     return test>0.0;
-}
-
-const Point& Line::GetLeft(const Point& pt)
-{
-     if (IsLeft(pt)) {
-          return _point2;
-     }
-     else {
-          return _point1;
-     }
-}
-
-const Point& Line::GetRight(const Point& pt)
-{
-     if (!IsLeft(pt)) {
-          return _point2;
-     }
-     else {
-          return _point1;
-     }
 }
 
 std::string Line::toString() const

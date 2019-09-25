@@ -119,11 +119,6 @@ public:
      Point ShortestPoint(const Point& p) const;
 
      /**
-      * @return true if the point p lies on the line defined by the first and the second point
-      */
-     bool IsInLine(const Point& p) const;
-
-     /**
       * @see IsInLine
       * @return true if the point p is within the line segment defined the line end points
       */
@@ -175,14 +170,6 @@ public:
       * @see Macro.h
       */
      bool operator!=(const Line& l) const;
-
-
-     /**
-      * @return true if this < l segments are not equal. The end points must be in the range of J_EPS.
-      * @see Macro.h
-      */
-     bool operator<(const Line& l) const;
-
 
 
      /**
@@ -248,38 +235,6 @@ public:
       * @return true if the given point is one end point of the segment
       */
      bool HasEndPoint(const Point& point) const;
-
-     /**
-      * Determine on which side the point is located on of the line directed from (_point1 to _point2).
-      * @return 0 (Left) or 1 (Right) depending on which side of the line the point is located.
-      * The return value is undefined if the points are colinear.
-      */
-     int WichSide(const Point& pt);
-
-     /**
-      * @return true if the point is located in the left hand side of the line directed from (_point1 to _point2).
-      */
-     bool IsLeft(const Point& pt);
-
-     /**
-      * @return true for horizontal lines
-      */
-     bool IsHorizontal();
-
-     /**
-      * @return true for vertical lines
-      */
-     bool IsVertical();
-
-     /**
-      * @return left point wrt. the point pt
-      */
-     const Point& GetLeft(const Point& pt);
-
-     /**
-      * @return left point wrt. the point pt
-      */
-     const Point& GetRight(const Point& pt);
 
      /**
       * @return a nice formated string describing the line

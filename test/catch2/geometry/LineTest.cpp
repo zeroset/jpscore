@@ -193,42 +193,6 @@ TEST_CASE("geometry/Line", "[geometry][Line]")
         REQUIRE(std::isnan(P3._y));
     }
 
-    SECTION("Line Horizontal Vertical")
-    {
-        for(int i = 0; i <= 12; ++i) {
-            Line L1(Point(0, 0), Point(cos(i * PI / 12), sin(i * PI / 12)));
-            if(i == 0 || i == 12) {
-                REQUIRE(L1.IsHorizontal());
-            } else if(i == 6) {
-                REQUIRE(L1.IsVertical());
-            } else {
-                REQUIRE_FALSE(L1.IsHorizontal());
-                REQUIRE_FALSE(L1.IsVertical());
-            }
-        }
-    }
-
-    SECTION("Line Which Side")
-    {
-        Point Pleft(-2, 2);
-        Point Pright(2, -2);
-
-
-        REQUIRE(Line(Point(0, -2), Point(0, 1)).WichSide(Pleft) == 0);
-        REQUIRE(Line(Point(0, -2), Point(0, 1)).IsLeft(Pleft));
-        REQUIRE(Line(Point(0, -2), Point(0, 1)).WichSide(Pright) == 1);
-        REQUIRE_FALSE(Line(Point(0, -2), Point(0, 1)).IsLeft(Pright));
-
-        for(int i = 0; i <= 3; ++i) { // including horizontal lines
-            Line L1(Point(0, 0), Point(cos(i * PI / 6), sin(i * PI / 6)));
-
-            REQUIRE(L1.WichSide(Pleft) == 0);
-            REQUIRE(L1.IsLeft(Pleft));
-            REQUIRE(L1.WichSide(Pright) == 1);
-            REQUIRE_FALSE(L1.IsLeft(Pright));
-        }
-    }
-
     SECTION("Line almost in LineSegment")
     {
         Line L1(Point(0, 6.27), Point(3.62, 6.27));
