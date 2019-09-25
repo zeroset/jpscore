@@ -21,6 +21,8 @@
 #include <catch2/catch.hpp>
 #include <cmath>
 
+using Catch::Matchers::Equals;
+
 const double PI = std::acos(-1);
 
 TEST_CASE("geometry/Line", "[geometry][Line]")
@@ -208,5 +210,39 @@ TEST_CASE("geometry/Line", "[geometry][Line]")
         REQUIRE(L1.NearlyInLineSegment(P2));
         REQUIRE(L2.NearlyInLineSegment(P3));
         REQUIRE(L2.NearlyInLineSegment(P4));
+    }
+
+    SECTION("Write")
+    {
+        REQUIRE_THAT(Line().Write(),
+                     Equals("\t\t<wall color=\"100\">\n\t\t\t<point xPos=\"0.00\" "
+                            "yPos=\"0.00\"/>\n\t\t\t<point "
+                            "xPos=\"0.00\" yPos=\"0.00\"/>\n\t\t</wall>\n"));
+        REQUIRE_THAT(Line(Point(0, 0), Point(0.0001, 1)).Write(),
+                     Equals("\t\t<wall color=\"100\">\n\t\t\t<point xPos=\"0.00\" "
+                            "yPos=\"0.00\"/>\n\t\t\t<point "
+                            "xPos=\"0.00\" yPos=\"1.00\"/>\n\t\t</wall>\n"));
+        REQUIRE_THAT(Line(Point(0, 0), Point(0.1, 1)).Write(),
+                     Equals("\t\t<wall color=\"100\">\n\t\t\t<point xPos=\"0.00\" "
+                            "yPos=\"0.00\"/>\n\t\t\t<point "
+                            "xPos=\"0.10\" yPos=\"1.00\"/>\n\t\t</wall>\n"));
+        REQUIRE_THAT(Line(Point(0, 0), Point(0.115, 0)).Write(),
+                     Equals("\t\t<wall color=\"100\">\n\t\t\t<point xPos=\"0.00\" "
+                            "yPos=\"0.00\"/>\n\t\t\t<point "
+                            "xPos=\"0.12\" yPos=\"0.00\"/>\n\t\t</wall>\n"));
+    }
+
+    SECTION("toString")
+    {
+        REQUIRE_THAT(Line().toString(), Equals("( 0.00 : 0.00 )--( 0.00 : 0.00 )"));
+
+        REQUIRE_THAT(Line(Point(0, 0), Point(0.0001, 1)).toString(),
+                     Equals("( 0.00 : 0.00 )--( 0.00 : 1.00 )"));
+
+        REQUIRE_THAT(Line(Point(0, 0), Point(0.1, 1)).toString(),
+                     Equals("( 0.00 : 0.00 )--( 0.10 : 1.00 )"));
+
+        REQUIRE_THAT(Line(Point(0, 0), Point(0.115, 0)).toString(),
+                     Equals("( 0.00 : 0.00 )--( 0.12 : 0.00 )"));
     }
 }

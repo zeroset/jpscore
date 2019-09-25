@@ -27,9 +27,11 @@
 #include "Line.h"
 
 #include "Wall.h"
+#include "general/Logger.h"
 #include "general/Macros.h"
 #include "math/Mathematics.h"
 
+#include <fmt/format.h>
 #include <vector>
 
 int Line::_static_UID = 0;
@@ -105,19 +107,12 @@ const Point& Line::GetCentre() const
  ************************************************************/
 std::string Line::Write() const
 {
-     std::string geometry;
-     char wall[500] = "";
-     geometry.append("\t\t<wall color=\"100\">\n");
-     sprintf(wall, "\t\t\t<point xPos=\"%.2f\" yPos=\"%.2f\"/>\n",
-               (GetPoint1()._x)*FAKTOR,
-               (GetPoint1()._y)*FAKTOR);
-     geometry.append(wall);
-     sprintf(wall, "\t\t\t<point xPos=\"%.2f\" yPos=\"%.2f\"/>\n",
-               (GetPoint2()._x)*FAKTOR,
-               (GetPoint2()._y)*FAKTOR);
-     geometry.append(wall);
-     geometry.append("\t\t</wall>\n");
-     return geometry;
+    return fmt::format("\t\t<wall color=\"100\">\n\t\t\t<point xPos=\"{:.2f}\" yPos=\"{:.2f}\"/>\n\t\t\t<point "
+                       "xPos=\"{:.2f}\" yPos=\"{:.2f}\"/>\n\t\t</wall>\n",
+                       GetPoint1()._x * FAKTOR,
+                       GetPoint1()._y * FAKTOR,
+                       GetPoint2()._x * FAKTOR,
+                       GetPoint2()._y * FAKTOR);
 }
 
 
@@ -142,7 +137,7 @@ Point Line::NormalVec() const
           /* Normieren */
           norm = sqrt(nx*nx+ny*ny);
           if (fabs(norm)<J_EPS) {
-               Log->Write("ERROR: \tLine::NormalVec() norm==0\n");
+              Logging::Error("Line::NormalVec() norm==0");
                exit(0);
           }
           nx /= norm;
@@ -294,12 +289,12 @@ bool Line::Overlapp(const Line& l) const
      if (fabs(vecAB.Determinant(vecDC))<J_EPS) {
 
           if (IsInLineSegment(l.GetPoint1()) && !HasEndPoint(l.GetPoint1())) {
-               //Log->Write("ERROR: 1. Overlapping walls %s and %s ", toString().c_str(),l.toString().c_str());
-               return true;
+              // Logging::Error(fmt::format("1. Overlapping walls {} and {} ", toString().c_str(),l.toString().c_str()));
+              return true;
           }
 
           if (IsInLineSegment(l.GetPoint2()) && !HasEndPoint(l.GetPoint2())) {
-               //Log->Write("ERROR: 2. Overlapping walls %s and %s ", toString().c_str(),l.toString().c_str());
+              // Logging::Error(fmt::format("2. Overlapping walls {} and {} ", toString().c_str(),l.toString().c_str()));
                return true;
           }
      }
@@ -450,31 +445,23 @@ bool Line::ShareCommonPointWith(const Line& line) const
 
 bool Line::HasEndPoint(const Point& point) const
 {
-     if (_point1==point) return true;
-     return _point2==point;
+    if(_point1 == point) {
+        return true;
+    }
+    return _point2 == point;
 }
 
 bool Line::NearlyHasEndPoint(const Point& point) const
 {
-     // std::cout << _point1.toString() << "\n";
-     // std::cout << _point2.toString() << "\n";
-     // std::cout << point.toString() << "\n";
-
-
-     // std::cout << "--> " << (_point1-point).Norm() << "\n";
-     // std::cout << "--> " << (_point2-point).Norm() << "\n";
-     // std::cout << "<-- " << J_EPS_DIST << "\n";
-
-
-     if ((_point1-point).Norm() <= J_EPS_DIST) return true;
-     return ((_point2-point).Norm() <= J_EPS_DIST);
+    if((_point1 - point).Norm() <= J_EPS_DIST) {
+        return true;
+    }
+    return ((_point2 - point).Norm() <= J_EPS_DIST);
 }
 
 
 bool Line::IntersectionWithCircle(const Point& centre, double radius /*cm for pedestrians*/)
 {
-
-
      //this formula assumes that the circle is centered the origin.
      // so we translate the complete stuff such that the circle ends up at the origin
      Point p1 = _point1-centre;
@@ -497,16 +484,13 @@ bool Line::IntersectionWithCircle(const Point& centre, double radius /*cm for pe
      delta = b*b-4*a*c;
 
      if (p1==p2) {
-          //Log->Write("isLineCrossingCircle: Your line is a point");
+         // Logging::Error("isLineCrossingCircle: Your line is a point");
           return false;
      }
      if (delta<0.0) {
-          char tmp[CLENGTH];
-          sprintf(tmp, "there is a bug in 'isLineCrossingCircle', delta(%f) can t be <0 at this point.", delta);
-          Log->Write(tmp);
-          Log->Write("press ENTER");
+          Logging::Error(fmt::format("There is a bug in 'isLineCrossingCircle', delta({}) cannot be <0 at this point.", delta));
           return false; //fixme
-          //getc(stdin);
+          // getc(stdin);
      }
 
      double t1 = (-b+sqrt(delta))/(2*a);
@@ -517,9 +501,7 @@ bool Line::IntersectionWithCircle(const Point& centre, double radius /*cm for pe
 
 std::string Line::toString() const
 {
-     std::stringstream tmp;
-     tmp << _point1.toString() << "--" << _point2.toString();
-     return tmp.str();
+    return fmt::format("{}--{}", _point1.toString(), _point2.toString());
 }
 
 // get distance between first point of line with the intersection point.
@@ -534,16 +516,11 @@ double Line::GetDistanceToIntersectionPoint(const Line& l) const
                intersection==LineIntersectType::OVERLAP) {
           return std::numeric_limits<double>::infinity();
      }
-     if (!IsInLineSegment(PointF)) //is point on the line?
-          return std::numeric_limits<double>::infinity();
+     if(!IsInLineSegment(PointF)) { // is point on the line?
+         return std::numeric_limits<double>::infinity();
+     }
+
      double dist = (_point1-PointF).NormSquare();
-#if DEBUG
-     printf("Enter GetIntersection\n");
-     cout<< "\t" << l.toString() << " intersects with " << toString() <<endl;
-     cout<<"\t at point " << PointF.toString()<<endl;
-     cout <<  "\t\t --> distance is "<< sqrt(dist)<< "... return (squared) "<< dist<<endl;
-     printf("Leave GetIntersection\n");
-#endif
 
      return dist;
 
@@ -564,8 +541,6 @@ double Line::GetDistanceToIntersectionPoint(const Line& l) const
 
 double Line::GetDeviationAngle(const Line& l) const
 {
-     // const double PI = 3.14159258;
-
      Point P = _point1;
      Point Goal = _point2;
 
@@ -581,19 +556,19 @@ double Line::GetDeviationAngle(const Line& l) const
      angleR = atan((Goal-P).CrossProduct(R-P)/(Goal-P).ScalarProduct(R-P));
 
      angle = (dist_Goal_L<dist_Goal_R) ? angleL : angleR;
-#if DEBUG
-     printf("Enter GetAngel()\n");
-     printf("\tP=[%f,%f]\n",P.GetX(), P.GetY());
-     printf("\tGoal=[%f,%f]\n",Goal.GetX(), Goal.GetY());
-     printf("\tL=[%f,%f]\n",L.GetX(), L.GetY());
-     printf("\tR=[%f,%f]\n",R.GetX(), R.GetY());
-     printf("\t\tdist_Goal_L=%f\n",dist_Goal_L);
-     printf("\t\tdist_Goal_R=%f\n",dist_Goal_R);
-     printf("\t\t --> angleL=%f\n",angleL);
-     printf("\t\t --> angleR=%f\n",angleR);
-     printf("\t\t --> angle=%f\n",angle);
-     printf("Leave GetAngel()\n");
-#endif
+
+     Logging::Debug("Enter GetAngel()");
+     Logging::Debug(fmt::format("\tP=[{:f},{:f}]", P._x, P._y));
+     Logging::Debug(fmt::format("\tGoal=[{:f},{:f}]",Goal._x, Goal._y));
+     Logging::Debug(fmt::format("\tL=[{:f},{:f}]",L._x, L._y));
+     Logging::Debug(fmt::format("\tR=[{:f},{:f}]",R._x, R._y));
+     Logging::Debug(fmt::format("\t\tdist_Goal_L={:f}",dist_Goal_L));
+     Logging::Debug(fmt::format("\t\tdist_Goal_R={:f}",dist_Goal_R));
+     Logging::Debug(fmt::format("\t\t --> angleL={:f}",angleL));
+     Logging::Debug(fmt::format("\t\t --> angleR={:f}",angleR));
+     Logging::Debug(fmt::format("\t\t --> angle={:f}",angle));
+     Logging::Debug("Leave GetAngel()");
+
      return angle;
 }
 
@@ -630,9 +605,7 @@ double Line::GetAngle(const Line& l) const
 //    they are nearly equal that opt for the right.
 double Line::GetObstacleDeviationAngle(const std::vector<Wall>& owalls, const std::vector<Wall>& rwalls) const
 {
-#if DEBUG
-     printf("Enter GetObstacleDeviationAngle()\n");
-#endif
+    Logging::Debug("Enter GetObstacleDeviationAngle()");
      Point P = _point1;
      Point Goal = _point2;
      Point GL, GR;
@@ -696,20 +669,15 @@ double Line::GetObstacleDeviationAngle(const std::vector<Wall>& owalls, const st
                // smallest deviation.
                //----------------------- check the subroom walls
                for (unsigned int i = 0; i<rwalls.size(); i++) {
-                    // printf("==Left intersection with wall[%f, %f]--[%f, %f]\n", rwalls[i].GetPoint1().GetX(), rwalls[i].GetPoint1().GetY(), rwalls[i].GetPoint2().GetX(), rwalls[i].GetPoint2().GetY());
-                    distToRoomL = tmpDirectionL.GetDistanceToIntersectionPoint(rwalls[i]);
-                    // printf("==Right intersection with wall[%f, %f]--[%f, %f]\n", rwalls[i].GetPoint1().GetX(),rwalls[i].GetPoint1().GetY(), rwalls[i].GetPoint2().GetX(),rwalls[i].GetPoint2().GetY());
-
                     distToRoomR = tmpDirectionR.GetDistanceToIntersectionPoint(rwalls[i]);
-                    // printf("BEFORE distToRoomL = %f, minDisttoroomL =%f,\n distToRoomR=%f, mindisttoroomR=%f\n", distToRoomL, minDistToRoomL, distToRoomR, minDistToRoomR);
 
-                    if (distToRoomL<minDistToRoomL)
+                    if (distToRoomL<minDistToRoomL) {
                          minDistToRoomL = distToRoomL;
+                    }
 
-                    if (distToRoomR<minDistToRoomR)
+                    if (distToRoomR<minDistToRoomR) {
                          minDistToRoomR = distToRoomR;
-                    // printf("AFTER distToRoomL = %f, minDisttoroomL =%f,\n distToRoomR=%f, mindisttoroomR=%f\n", distToRoomL, minDistToRoomL, distToRoomR, minDistToRoomR);
-                    // getc(stdin);
+                    }
                } //for roome walls
                //-----------------------------------------------
                if (minDistToRoomR>minDistToRoomL)
@@ -729,43 +697,37 @@ double Line::GetObstacleDeviationAngle(const std::vector<Wall>& owalls, const st
                angle = angleL;
           }
           else {
-               // printf("continue ");
-               // printf("VisibleL=%d, VisibleR=%d\n", visibleL, visibleR);
                continue; // both angles are not OK. check next wall
 
           }
-#if DEBUG
-          printf("---------\n\tP=[%f,%f]\n",P.GetX(), P.GetY());
-          printf("\tGoal=[%f,%f]\n",Goal.GetX(), Goal.GetY());
-          printf("\tL=[%f,%f]\n",L.GetX(), L.GetY());
-          printf("\tR=[%f,%f]\n",R.GetX(), R.GetY());
-          // printf("\t\tdist_Goal_L=%f\n",dist_Goal_L);
-          // printf("\t\tdist_Goal_R=%f\n",dist_Goal_R);
-          printf("VisibleL=%d, VisibleR=%d\n", visibleL, visibleR);
-          printf("distToRoomL = %f, distToRoomR = %f\n", minDistToRoomL, minDistToRoomR);
-          printf("\t\t --> angleL=%f\n",angleL);
-          printf("\t\t --> angleR=%f\n",angleR);
-          printf("\t\t --> angle=%f\n-----\n",angle);
 
-#endif
+          Logging::Debug(fmt::format("P=[{:f},{:f}]",P._x, P._y));
+          Logging::Debug(fmt::format("Goal=[{:f},{:f}]",Goal._x, Goal._y));
+          Logging::Debug(fmt::format("L=[{:f},{:f}]",L._x, L._y));
+          Logging::Debug(fmt::format("R=[{:f},{:f}]",R._x, R._y));
+          // Logging::Debug(fmt::format("dist_Goal_L={:f}",dist_Goal_L));
+          // Logging::Debug(fmt::format("dist_Goal_R={:f}",dist_Goal_R));
+          Logging::Debug(fmt::format("VisibleL={}, VisibleR={}", visibleL, visibleR));
+          Logging::Debug(fmt::format("distToRoomL = {:f}, distToRoomR = {:f}", minDistToRoomL, minDistToRoomR));
+          Logging::Debug(fmt::format(" --> angleL={:f}",angleL));
+          Logging::Debug(fmt::format(" --> angleR={:f}",angleR));
+          Logging::Debug(fmt::format(" --> angle={:f}",angle));
 
           if (fabs(angle)<fabs(minAngle))
                minAngle = angle;
-#if DEBUG
-          printf("\t\t --> minAngle=%f\n", minAngle);
-#endif
+
+          Logging::Debug(fmt::format(" --> minAngle={:f}", minAngle));
 
 
      }// owalls
 
 
      if (minAngle==std::numeric_limits<double>::infinity()) {
-          printf("WARNING:  minAngle ist infinity\n");
+         Logging::Warning("minAngle ist infinity");
           getc(stdin);
      }
-#if DEBUG
-     printf("Leave GetObstacleDeviationAngle() with  angle=%f\n", minAngle);
-#endif
-     return minAngle;
 
+     Logging::Debug(fmt::format("Leave GetObstacleDeviationAngle() with  angle={}", minAngle));
+
+     return minAngle;
 }
