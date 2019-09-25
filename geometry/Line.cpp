@@ -136,7 +136,7 @@ Point Line::NormalVec() const
           ny = 1;
           /* Normieren */
           norm = sqrt(nx*nx+ny*ny);
-          if (fabs(norm)<J_EPS) {
+          if (std::fabs(norm)<J_EPS) {
               Logging::Error("Line::NormalVec() norm==0");
                exit(0);
           }
@@ -156,17 +156,17 @@ double Line::NormalComp(const Point& v) const
 
      double alpha;
 
-     if (fabs(l._x)<J_EPS) {
+     if (std::fabs(l._x)<J_EPS) {
           alpha = v._x/n._x;
      }
-     else if (fabs(l._y)<J_EPS) {
+     else if (std::fabs(l._y)<J_EPS) {
           alpha = v._y/n._y;
      }
      else {
           alpha = l.CrossProduct(v)/n.CrossProduct(l);
      }
 
-     return fabs(alpha);
+     return std::fabs(alpha);
 }
 // Lotfußpunkt zur Geraden Line
 // Muss nicht im Segment liegen
@@ -199,18 +199,19 @@ bool Line::isBetween(const Point& p) const
  * */
 Point Line::ShortestPoint(const Point& p) const
 {
-     if (_point1==_point2)
+    if (_point1==_point2) {
           return _point1;
+    }
 
      const Point& t = _point1-_point2;
      double lambda = (p-_point2).ScalarProduct(t)/t.ScalarProduct(t);
-     if (lambda<0)
+     if (lambda<0) {
           return _point2;
-     else if (lambda>1)
+     }
+     if (lambda>1) {
           return _point1;
-     else
-          return _point2+t*lambda;
-
+     }
+     return _point2+t*lambda;
 }
 
 /*
@@ -221,11 +222,11 @@ Point Line::ShortestPoint(const Point& p) const
  * */
 bool Line::IsInLineSegment(const Point& p) const
 {
-     return fabs((_point1-p).Norm()+(_point2-p).Norm()-(_point2-_point1).Norm())<J_EPS; // old version
+     return std::fabs((_point1-p).Norm()+(_point2-p).Norm()-(_point2-_point1).Norm())<J_EPS; // old version
 }
 bool Line::NearlyInLineSegment(const Point& p) const
 {
-     return fabs((_point1-p).Norm()+(_point2-p).Norm()-(_point2-_point1).Norm())<J_EPS_DIST; // old version
+     return std::fabs((_point1-p).Norm()+(_point2-p).Norm()-(_point2-_point1).Norm())<J_EPS_DIST; // old version
 }
 
 /* Berechnet direkt den Abstand von p zum Segment l
@@ -280,13 +281,12 @@ double Line::LengthSquare() const
      return (_point1-_point2).NormSquare();
 }
 
-//TODO unit  test
 bool Line::Overlapp(const Line& l) const
 {
      //first check if they are colinear
      Point vecAB = l.GetPoint2()-l.GetPoint1();
      Point vecDC = _point1-_point2;
-     if (fabs(vecAB.Determinant(vecDC))<J_EPS) {
+     if (std::fabs(vecAB.Determinant(vecDC))<J_EPS) {
 
           if (IsInLineSegment(l.GetPoint1()) && !HasEndPoint(l.GetPoint1())) {
               // Logging::Error(fmt::format("1. Overlapping walls {} and {} ", toString().c_str(),l.toString().c_str()));
@@ -315,29 +315,25 @@ int Line::IntersectionWith(const Point& p1, const Point& p2, Point& p3) const
 
      if (denom==0.) {
           if (numer==0.) {
-               if (this->ShareCommonPointWith(Line(p1, p2), p3)) {
-                    return LineIntersectType::INTERSECTION;
-               }
-               double t0 = (_point1-p1).ScalarProduct(r)/r.ScalarProduct(r);
-               double t1 = t0+s.ScalarProduct(r)/r.ScalarProduct(r);
-               bool intersec;
-               if (s.ScalarProduct(r)<0) {
-                    intersec = IntervalsIntersect(t1, t0, 1, 0);
-               }
-               else {
-                    intersec = IntervalsIntersect(t0, t1, 1, 0);
-               }
-               if (intersec) {
-                    return LineIntersectType::OVERLAP;
-               }
-               else {
-                    return LineIntersectType::NO_INTERSECTION; //colinear and disjoint
-               }
-          }
-          else { // the lines are just parallel and do not share a common poin
-               return LineIntersectType::NO_INTERSECTION;
-          }
+              if(this->ShareCommonPointWith(Line(p1, p2), p3)) {
+                  return LineIntersectType::INTERSECTION;
+              }
+              double t0 = (_point1 - p1).ScalarProduct(r) / r.ScalarProduct(r);
+              double t1 = t0 + s.ScalarProduct(r) / r.ScalarProduct(r);
+              bool   intersec;
+              if(s.ScalarProduct(r) < 0) {
+                  intersec = IntervalsIntersect(t1, t0, 1, 0);
+              } else {
+                  intersec = IntervalsIntersect(t0, t1, 1, 0);
+              }
+              if(intersec) {
+                  return LineIntersectType::OVERLAP;
+              }
 
+              return LineIntersectType::NO_INTERSECTION; // colinear and disjoint
+          }
+          // the lines are just parallel and do not share a common poin
+          return LineIntersectType::NO_INTERSECTION;
      }
      double t = (_point1-p1).CrossProduct(s)/(r.CrossProduct(s));
      double u = (_point1-p1).CrossProduct(r)/(r.CrossProduct(s));
@@ -424,17 +420,15 @@ Line Line::Enlarge(double d) const
 
 bool Line::ShareCommonPointWith(const Line& line, Point& P) const
 {
-
-     if (line.GetPoint1()==_point1 || line.GetPoint2()==_point1) {
-          P = _point1;
-          return true;
-     }
-     else if (line.GetPoint1()==_point2 || line.GetPoint2()==_point2) {
-          P = _point2;
-          return true;
-     }
-     else
-          return false;
+    if(line.GetPoint1() == _point1 || line.GetPoint2() == _point1) {
+        P = _point1;
+        return true;
+    }
+    if(line.GetPoint1() == _point2 || line.GetPoint2() == _point2) {
+        P = _point2;
+        return true;
+    }
+    return false;
 }
 
 bool Line::ShareCommonPointWith(const Line& line) const
@@ -474,7 +468,9 @@ bool Line::IntersectionWithCircle(const Point& centre, double radius /*cm for pe
      double r2 = radius*radius;
 
      double delta = r2*dr2-D2;
-     if (delta<=0.0) return false;
+     if (delta<=0.0) {
+         return false;
+     }
 
      double a = dr2;
 
@@ -495,8 +491,10 @@ bool Line::IntersectionWithCircle(const Point& centre, double radius /*cm for pe
 
      double t1 = (-b+sqrt(delta))/(2*a);
      double t2 = (-b-sqrt(delta))/(2*a);
-     if ((t1<0.0) || (t1>1.0)) return false;
-     return !((t2<0.0) || (t2>1.0));
+     if((t1 < 0.0) || (t1 > 1.0)) {
+         return false;
+     }
+     return !((t2 < 0.0) || (t2 > 1.0));
 }
 
 std::string Line::toString() const
@@ -586,7 +584,7 @@ double Line::GetAngle(const Line& l) const
      angleL = atan((Goal-P).CrossProduct(L-P)/(Goal-P).ScalarProduct(L-P));
      angleR = atan((Goal-P).CrossProduct(R-P)/(Goal-P).ScalarProduct(R-P));
 
-     return (fabs(angleL)>fabs(angleR)) ? angleL : angleR;
+     return (std::fabs(angleL)>std::fabs(angleR)) ? angleL : angleR;
 
 }
 
@@ -626,9 +624,7 @@ double Line::GetObstacleDeviationAngle(const std::vector<Wall>& owalls, const st
      double distToRoomL = 20001, distToRoomR = 2001;
      double minDistToRoomL = 20001, minDistToRoomR = 2001;
 
-     //     for (unsigned int i = 0; i < owalls.size(); i++) {
-     // l = owalls[i];
-     for (auto l:owalls) {
+     for (const auto & l : owalls) {
           minDistToRoomL = std::numeric_limits<double>::infinity(), minDistToRoomR = std::numeric_limits<double>::infinity();
           visibleL = true;
           visibleR = true;
@@ -647,48 +643,53 @@ double Line::GetObstacleDeviationAngle(const std::vector<Wall>& owalls, const st
           tmpDirectionL = Line(P, GL);
           tmpDirectionR = Line(P, GR);
 
-          for (auto l_other:owalls) {
-               if (l_other==l) continue;
+          for(const auto & l_other : owalls) {
+              if(l_other == l) {
+                  continue;
+              }
 
-               if (tmpDirectionL.IntersectionWith(l_other)) {
+               if (tmpDirectionL.IntersectionWith(l_other) != 0) {
                     visibleL = false;
                     break;
                }
           }
 
-          for (auto l_other:owalls) {
-               if (l_other==l) continue;
+          for(const auto & l_other : owalls) {
+              if(l_other == l) {
+                  continue;
+              }
 
-               if (tmpDirectionR.IntersectionWith(l_other)) {
-                    visibleR = false;
-                    break;
-               }
+              if(tmpDirectionR.IntersectionWith(l_other) != 0) {
+                  visibleR = false;
+                  break;
+              }
           }
 
           if (visibleR && visibleL) {  // both angles are OK. Get
                // smallest deviation.
                //----------------------- check the subroom walls
-               for (unsigned int i = 0; i<rwalls.size(); i++) {
-                    distToRoomR = tmpDirectionR.GetDistanceToIntersectionPoint(rwalls[i]);
+               for(const auto & wall : rwalls) {
+                   distToRoomR = tmpDirectionR.GetDistanceToIntersectionPoint(wall);
 
-                    if (distToRoomL<minDistToRoomL) {
-                         minDistToRoomL = distToRoomL;
-                    }
+                   if(distToRoomL < minDistToRoomL) {
+                       minDistToRoomL = distToRoomL;
+                   }
 
-                    if (distToRoomR<minDistToRoomR) {
-                         minDistToRoomR = distToRoomR;
-                    }
-               } //for roome walls
+                   if(distToRoomR < minDistToRoomR) {
+                       minDistToRoomR = distToRoomR;
+                   }
+               } // for roome walls
                //-----------------------------------------------
-               if (minDistToRoomR>minDistToRoomL)
-                    angle = angleR;
-               else if (minDistToRoomL>minDistToRoomR)
-                    angle = angleL;
-                    // both distance equal, prefer right
-               else if (almostEqual(angleR, angleL, 0.001))
-                    angle = angleR;
-               else // distances equal, but angles not. Take smallest
-                    angle = (fabs(angleL)<fabs(angleR)) ? angleL : angleR;
+               if(minDistToRoomR > minDistToRoomL) {
+                   angle = angleR;
+               } else if(minDistToRoomL > minDistToRoomR) {
+                   angle = angleL;
+                   // both distance equal, prefer right
+               } else if(almostEqual(angleR, angleL, 0.001)) {
+                   angle = angleR;
+               } else { // distances equal, but angles not. Take smallest
+                   angle = (std::fabs(angleL) < std::fabs(angleR)) ? angleL : angleR;
+               }
           }//both are visible
           else if (visibleR && !visibleL) {
                angle = angleR;
@@ -698,7 +699,6 @@ double Line::GetObstacleDeviationAngle(const std::vector<Wall>& owalls, const st
           }
           else {
                continue; // both angles are not OK. check next wall
-
           }
 
           Logging::Debug(fmt::format("P=[{:f},{:f}]",P._x, P._y));
@@ -713,8 +713,9 @@ double Line::GetObstacleDeviationAngle(const std::vector<Wall>& owalls, const st
           Logging::Debug(fmt::format(" --> angleR={:f}",angleR));
           Logging::Debug(fmt::format(" --> angle={:f}",angle));
 
-          if (fabs(angle)<fabs(minAngle))
+          if (std::fabs(angle)<std::fabs(minAngle)) {
                minAngle = angle;
+          }
 
           Logging::Debug(fmt::format(" --> minAngle={:f}", minAngle));
 
